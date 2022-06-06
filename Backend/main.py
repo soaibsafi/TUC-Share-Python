@@ -7,7 +7,7 @@ app = FastAPI()
 session = session.get_session('https://www.tu-chemnitz.de/informatik/DVS/blocklist/')
 @app.get("/")
 async def root():
-    staus = session.get("https://www.tu-chemnitz.de/informatik/DVS/blocklist/e3b0b44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+    staus = session.get("https://www.tu-chemnitz.de/informatik/DVS/blocklist/bb48e8bbbfed9d383765faf78c8f29ce2e4ac49177b02b9b3ecb94a26e7feed5")
     print(staus.status_code)
     return {"message": staus.status_code}
 
@@ -15,6 +15,6 @@ async def root():
 
 @app.get("/status")
 async def root():
-    staus = session.get("https://www.tu-chemnitz.de/informatik/DVS/blocklist/w3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+    staus = session.put("https://www.tu-chemnitz.de/informatik/DVS/blocklist/bb48e8bbbfed9d383765faf78c8f29ce2e4ac49177b02b9b3ecb94a26e7feed5")
     print(staus.status_code)
     return {"Status": staus.status_code}
