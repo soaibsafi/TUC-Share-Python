@@ -7,7 +7,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 
 def get_session(url):
-  driver = webdriver.Firefox()
+  driver = webdriver.Chrome()
   # Here I had to select my school among others
   #url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"
   driver.get(url)
