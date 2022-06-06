@@ -10,6 +10,9 @@ class User(BaseModel):
     password: str
     user_type: str
 
+    class Config:
+        orm_mode = True
+
 class FileInfo(BaseModel):
     file_id: int
     file: str
@@ -22,10 +25,16 @@ class FileInfo(BaseModel):
     status: str
     user_id: int
 
+    class Config:
+        orm_mode = True
+
 class RequestInfo(BaseModel):
     req_id: int
     reason: str
     file_id: int
+
+    class Config:
+        orm_mode = True
 
 class DownloadInfo(BaseModel):
     download_id: int
@@ -33,3 +42,6 @@ class DownloadInfo(BaseModel):
     last_download_time: datetime.datetime
     download_url: str
     user_id: Optional[int] = None
+
+    class Config:
+        orm_mode = True
