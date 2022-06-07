@@ -1,13 +1,17 @@
 from typing import List
+import time
+import asyncio
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from . import query, model, schemas
 from .db_config import SessionLocal, engine
 
 model.Base.metadata.create_all(bind=engine)
-
+file_path = "./database/a.pdf"
 app = FastAPI()
 
 
@@ -18,6 +22,36 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def read_in_chunks(file_object, chunk_size=1024):
+    while True:
+        data = file_object.read(chunk_size)
+        if not data:
+            break
+        yield data
+
+def iterfile():
+    f = open(file_path, mode="rb")
+    while True:
+        data = f.read(1024)
+        if not data:
+            break
+        yield data
+
+    # with open(file_path, mode="rb") as file_like:
+    #     #TODO get file size -> divide into chunk -> for loop every chunk
+    #     for file in file_like:
+    #         for i in range(52):
+    #             time.sleep(0.001)
+    #             yield from file_like
+
+
+
+@app.get("/", response_class=FileResponse)
+async def main():
+    #return StreamingResponse(iterfile())
+    return file_path
+
 
 
 @app.post("/users/", response_model=schemas.User)
@@ -32,37 +66,38 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-@app.get("/login")
-# return user type as response
 
-#Admin API
-@app.get("/requests")
-# get all pending requests
+# @app.get("/login")
+# # return user type as response
 
-@app.delete("/unblock")
-# delete hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
+# #Admin API
+# @app.get("/requests")
+# # get all pending requests
 
-@app.put("/block")
-# add file hash to the https://www.tu-chemnitz.de/informatik/DVS/blocklist/
+# @app.delete("/unblock")
+# # delete hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
 
-#User API
-@app.get("/checkHash")
-# check hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
+# @app.put("/block")
+# # add file hash to the https://www.tu-chemnitz.de/informatik/DVS/blocklist/
 
-@app.post("/uploadFile")
-# Add selected file to the database and return the corresponding url
+# #User API
+# @app.get("/checkHash")
+# # check hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
 
-@app.get("/files/{user_id}")
-# Return all files belongs to this user
+# @app.post("/uploadFile")
+# # Add selected file to the database and return the corresponding url
 
-@app.delete("/file/{file_id}")
-# delete a file for register user
+# @app.get("/files/{user_id}")
+# # Return all files belongs to this user
 
-@app.get("/fileInfo")
-# return file information
+# @app.delete("/file/{file_id}")
+# # delete a file for register user
 
-@app.get("/download")
-# download the actual file
+# @app.get("/fileInfo")
+# # return file information
 
-@app.post("/changeStatus")
-# user can send request to admin to block/unblock
+# @app.get("/download")
+# # download the actual file
+
+# @app.post("/changeStatus")
+# # user can send request to admin to block/unblock
