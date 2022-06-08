@@ -1,4 +1,6 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import delete
+from database.db_config import engine
 
 from . import model, schemas
 from utils import hash
@@ -20,7 +22,7 @@ def get_user_by_username(db: Session, useranme: str):
     return db.query(model.User).filter(model.User.user_name == useranme).first()
 
 def get_file_type_by_file_id(db: Session, file_id: int):
-    return db.query(model.User).filter(model.FileInfo.file_id == file_id).first()
+    return db.query(model.FileInfo).filter(model.FileInfo.file_id == file_id).first()
 
 def upload_file(db: Session, file, file_name, file_size, file_type, upload_date_time, file_hash, user_ip, status, user_id=None):
     db_file = model.FileInfo(
@@ -39,28 +41,38 @@ def upload_file(db: Session, file, file_name, file_size, file_type, upload_date_
     db.refresh(db_file)
     return db_file
 
+def get_file_info(db: Session, file_id: int):
+    return db.query(
+        model.FileInfo.file_name, 
+        model.FileInfo.file_type,
+        model.FileInfo.file_size,
+        model.FileInfo.file_type,
+        model.FileInfo.upload_date_time,
+        model.FileInfo.status,
+        model.FileInfo.user_ip,
+        model.FileInfo.user_id
+        ).filter(model.FileInfo.file_id == file_id).first()
 
+def delete_file_by_file_id(file_id: int, db: Session):
+    file = db.query(model.FileInfo).filter(model.FileInfo.file_id == file_id).first()
+    if file==None:
+        return False
+    db.delete(file)
+    db.commit()
+    #db.refresh(file)
+    return True
 
-# async def upload_file(file: UploadFile = File(...)):
-#     filepath = file.filename
-#     filename, filetype = os.path.splitext(filepath)
-#     print(filename)
-#     print(filetype)
-#     upload_date_time = datetime.datetime.now()
-#     user_ip = helper.get_ip()
-#     f = await file.read()
-#     filesize = len(f)
-#     if filesize > 83886080:
-#         raise HTTPException(status_code=403, detail="Mam 10 MiB File Allowed")
-#     try:   
-#         file = await file.read() 
-#         with open(file.filepath, 'wb') as f:
-#             f.write(file)
-#     except Exception:
-#         return {"message": "There was an error uploading the file"}
-#     # finally:
-#     #     await file.close()
-#     file_hash = hash.hash_file(filepath)
-#     status = "Block"
+def add_request_info(reqInfo: schemas.RequestInfo, db: Session):
+    db_req = model.RequestInfo(
+        reason = reqInfo.reason,
+        file_id = reqInfo.file_id
+    )
+    db.add(db_req)
+    db.commit()
+    db.refresh(db_req)
+    return db_req
 
-#     return query.upload_file(file, filename, filesize, filetype, upload_date_time, file_hash, user_ip, status ) 
+def get_all_pending_request(db: Session):
+    data = db.query(model.RequestInfo).all()
+    print(data)
+    return data

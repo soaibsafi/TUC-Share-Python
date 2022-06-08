@@ -1,3 +1,4 @@
+import re
 from typing import List
 import time
 import os
@@ -31,27 +32,11 @@ def get_db():
         db.close()
 
 
-def iterfile():
-    f = open(file_path, mode="rb")
-    while True:
-        data = f.read(1024)
-        if not data:
-            break
-        yield data
-
-    # with open(file_path, mode="rb") as file_like:
-    #     #TODO get file size -> divide into chunk -> for loop every chunk
-    #     for file in file_like:
-    #         for i in range(52):
-    #             time.sleep(0.001)
-    #             yield from file_like
-
-
 
 @app.get("/download", response_class=FileResponse)
 async def main():
-    #return StreamingResponse(iterfile())
-    return file_path
+    return StreamingResponse(helper.get_download_file())
+    #return file_path
 
 
 
@@ -113,9 +98,15 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
 def get_file_type(file_id:int, db: Session = Depends(get_db)):
     db_file = query.get_file_type_by_file_id(db, file_id)
     return {"file_name":db_file.file_name, "file_type":db_file.file_type}
+
 # #Admin API
-# @app.get("/requests")
-# # get all pending requests
+@app.post("/requests")
+def get_pending_requests(reqInfo: schemas.RequestInfo, db: Session = Depends(get_db)):
+    return query.add_request_info(reqInfo, db)
+
+@app.get("/requests")
+def get_pending_requests(db: Session = Depends(get_db)):
+    return query.get_all_pending_request(db)
 
 # @app.delete("/unblock")
 # # delete hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
@@ -132,11 +123,22 @@ def get_file_type(file_id:int, db: Session = Depends(get_db)):
 # @app.get("/files/{user_id}")
 # # Return all files belongs to this user
 
-# @app.delete("/file/{file_id}")
+@app.delete("/file/{file_id}")
+def delete_file(file_id:int, db: Session = Depends(get_db)):
+    result =  query.delete_file_by_file_id(file_id, db)
+    if not result:
+        raise HTTPException(status_code=404, detail="File not found")
+    return {"detail":"Successfully Deleted"}
+
+
 # # delete a file for register user
 
-# @app.get("/fileInfo")
-# # return file information
+@app.get("/fileInfo/{file_id}")
+def get_file_info(file_id:int, db: Session = Depends(get_db)):
+    db_file = query.get_file_info(db, file_id=file_id)
+    if db_file is None:
+        raise HTTPException(status_code=404, detail="File not found")
+    return db_file
 
 # @app.get("/download")
 # # download the actual file
