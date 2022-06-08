@@ -76,3 +76,15 @@ def get_all_pending_request(db: Session):
     data = db.query(model.RequestInfo).all()
     print(data)
     return data
+
+def get_all_files_of_a_user(user_id:int, db: Session):
+    return db.query(
+        model.FileInfo.file_name, 
+        model.FileInfo.file_type,
+        model.FileInfo.file_size,
+        model.FileInfo.file_type,
+        model.FileInfo.upload_date_time,
+        model.FileInfo.status,
+        model.FileInfo.user_ip,
+        model.FileInfo.user_id
+        ).filter(model.FileInfo.user_id == user_id).all()

@@ -15,12 +15,13 @@ from sqlalchemy.orm import Session
 
 from database import query, model, schemas
 from database.db_config import SessionLocal, engine
-from utils import hash, helper
+from utils import hash, helper, session
 
 model.Base.metadata.create_all(bind=engine)
 file_path = "./database/a.pdf"
 app = FastAPI()
 
+#tuc_session = session.get_session()
 
 # Dependency
 def get_db():
@@ -30,36 +31,10 @@ def get_db():
     finally:
         db.close()
 
-def read_in_chunks(file_object, chunk_size=1024):
-    while True:
-        data = file_object.read(chunk_size)
-        if not data:
-            break
-        yield data
-
-def iterfile():
-    f = open(file_path, mode="rb")
-    while True:
-        data = f.read(1024)
-        if not data:
-            break
-        yield data
-
-    # with open(file_path, mode="rb") as file_like:
-    #     #TODO get file size -> divide into chunk -> for loop every chunk
-    #     for file in file_like:
-    #         for i in range(52):
-    #             time.sleep(0.001)
-    #             yield from file_like
-
-
-
 @app.get("/download/{fname}", response_class=FileResponse)
 async def main():
     return StreamingResponse(helper.get_download_file())
     #return file_path
-
-
 
 @app.post("/users/", response_model=schemas.User)
 def create_user(user: schemas.User, db: Session = Depends(get_db)):
@@ -101,7 +76,10 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
 
         file_hash = str(hash.hash_file(filename))
         print(file_hash)
-        status = "Block"
+        url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
+        s = tuc_session.get(url)
+        status = s.status_code
+        s = tuc_session.put(url)
     except Exception:
         return {"message": "There was an error uploading the file"}
     finally:
@@ -130,21 +108,23 @@ def get_pending_requests(reqInfo: schemas.RequestInfo, db: Session = Depends(get
 def get_pending_requests(db: Session = Depends(get_db)):
     return query.get_all_pending_request(db)
 
-# @app.delete("/unblock")
-# # delete hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
+@app.delete("/unblock")
+def unblock_file(file_hash: str):
+    url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
+    status = tuc_session.delete(url)
+    return status.status_code
 
-# @app.put("/block")
-# # add file hash to the https://www.tu-chemnitz.de/informatik/DVS/blocklist/
+@app.put("/block")
+def block_file(file_hash: str):
+    url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
+    status = tuc_session.put(url)
+    return status.status_code
 
-# #User API
-# @app.get("/checkHash")
-# # check hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
-
-# @app.post("/uploadFile")
-# # Add selected file to the database and return the corresponding url
-
-# @app.get("/files/{user_id}")
-# # Return all files belongs to this user
+@app.get("/checkStatus")
+def check_file_status(file_hash: str):
+    url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
+    status = tuc_session.get(url)
+    return status.status_code
 
 @app.delete("/file/{file_id}")
 def delete_file(file_id:int, db: Session = Depends(get_db)):
@@ -153,9 +133,6 @@ def delete_file(file_id:int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="File not found")
     return {"detail":"Successfully Deleted"}
 
-
-# # delete a file for register user
-
 @app.get("/fileInfo/{file_id}")
 def get_file_info(file_id:int, db: Session = Depends(get_db)):
     db_file = query.get_file_info(db, file_id=file_id)
@@ -163,8 +140,12 @@ def get_file_info(file_id:int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="File not found")
     return db_file
 
+@app.get("/files/{user_id}")
+def get_files_of_single_user(user_id:int, db: Session = Depends(get_db)):
+    return (query.get_all_files_of_a_user(user_id, db), {"status":"SUCESS"})
+
+
 # @app.get("/download")
 # # download the actual file
 
-# @app.post("/changeStatus")
-# # user can send request to admin to block/unblock
+

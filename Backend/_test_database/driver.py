@@ -43,14 +43,13 @@ driver.get(url)
 
 # driver.find_element_by_id('krbSubmit').click()
 driver.find_element(By.ID, 'krbSubmit').click()
-driver.find_element(By.ID, 'username').send_keys(os.getenv('USERNAME'))
+driver.find_element(By.ID, 'username').send_keys(os.getenv('USERNAM'))
 driver.find_element(By.XPATH, "//input[@value='Go on']").submit()
 driver.find_element(By.ID, 'password').send_keys(os.getenv('PASSWORD'))
 driver.find_element(By.XPATH, "//input[@value='Login']").submit()
 print(driver.session_id)
 driver.get(url)
 time.sleep(10)
-
 headers = {
 "User-Agent":
 "Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0"
@@ -63,7 +62,7 @@ for cookie in driver.get_cookies():
   c = {cookie['name']: cookie['value']}
   s.cookies.update(c)
 
-status = s.get("https://www.tu-chemnitz.de/informatik/DVS/blocklist/119a182f53b991b8ab6fd447581dd22a5a1c94bd72e1a940c8dd457a59088f84")
+status = s.get("https://www.tu-chemnitz.de/informatik/DVS/blocklist/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
 print("GET -> ", status.status_code)
 status = s.put("https://www.tu-chemnitz.de/informatik/DVS/blocklist/bb28e8bbbfed9d383765faf78c8f29ce2e4ac49177b02b9b3ecb94a26e7feed5")
 print("PUT -> ", status.status_code)
