@@ -1,10 +1,9 @@
-import re
 from typing import List
 import time
 import os
 import asyncio
 import datetime
-from unittest import result
+
 import base64
 from base64 import b64encode
 
@@ -31,9 +30,31 @@ def get_db():
     finally:
         db.close()
 
+def read_in_chunks(file_object, chunk_size=1024):
+    while True:
+        data = file_object.read(chunk_size)
+        if not data:
+            break
+        yield data
+
+def iterfile():
+    f = open(file_path, mode="rb")
+    while True:
+        data = f.read(1024)
+        if not data:
+            break
+        yield data
+
+    # with open(file_path, mode="rb") as file_like:
+    #     #TODO get file size -> divide into chunk -> for loop every chunk
+    #     for file in file_like:
+    #         for i in range(52):
+    #             time.sleep(0.001)
+    #             yield from file_like
 
 
-@app.get("/download", response_class=FileResponse)
+
+@app.get("/download/{fname}", response_class=FileResponse)
 async def main():
     return StreamingResponse(helper.get_download_file())
     #return file_path
@@ -53,6 +74,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 @app.post("/login")
 def login_validation(user: schemas.User, db: Session = Depends(get_db)):
+    print(user.user_name)
     db_user = query.get_user_by_username(db, user.user_name)
     if db_user==None:
         raise HTTPException(status_code=404, detail="User Not Found")
@@ -76,7 +98,7 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
             raise HTTPException(status_code=403, detail="Mam 10 MiB File Allowed")
         with open(file.filename, 'wb') as f:
             f.write(contents)
-        
+
         file_hash = str(hash.hash_file(filename))
         print(file_hash)
         status = "Block"
@@ -84,15 +106,15 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
         return {"message": "There was an error uploading the file"}
     finally:
         await file.close()
-    
+
     with open(filename, 'rb') as file_data:
         bytes_content = file_data.read()
     data = base64.b64encode(bytes_content).decode('utf-8')
-   
+
     d2 = base64.b64decode(data) # file download er somoy lagbe
     #print(bytes_content)
     #print(bytes_content)
-    return query.upload_file(db, data, root_name, file_size, file_type, upload_date_time, file_hash, user_ip, status ) 
+    return query.upload_file(db, data, root_name, file_size, file_type, upload_date_time, file_hash, user_ip, status )
 
 @app.get("/fileType/{file_id}")
 def get_file_type(file_id:int, db: Session = Depends(get_db)):
@@ -118,6 +140,7 @@ def get_pending_requests(db: Session = Depends(get_db)):
 # @app.get("/checkHash")
 # # check hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
 
+# @app.post("/uploadFile")
 # # Add selected file to the database and return the corresponding url
 
 # @app.get("/files/{user_id}")
