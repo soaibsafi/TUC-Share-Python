@@ -7,11 +7,12 @@ import datetime
 import base64
 from base64 import b64encode
 
-from fastapi import Depends, FastAPI, HTTPException, File, UploadFile
+from fastapi import Depends, FastAPI, HTTPException, File, UploadFile, Response, Body
 from fastapi.responses import StreamingResponse
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
+from fastapi.middleware.cors import CORSMiddleware
 
 from database import query, model, schemas
 from database.db_config import SessionLocal, engine
@@ -22,6 +23,21 @@ file_path = "./database/a.pdf"
 app = FastAPI()
 
 #tuc_session = session.get_session()
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:3001",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Dependency
 def get_db():
@@ -37,7 +53,8 @@ async def main():
     #return file_path
 
 @app.post("/users/", response_model=schemas.User)
-def create_user(user: schemas.User, db: Session = Depends(get_db)):
+async def create_user(user: schemas.User, db: Session = Depends(get_db)):
+    print(user)
     return query.create_user(db=db, user=user)
 
 @app.get("/users/{user_id}", response_model=schemas.User)
