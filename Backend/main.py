@@ -1,11 +1,13 @@
 from typing import List
 import time
+import os
 import asyncio
+import datetime
 from unittest import result
+import base64
+from base64 import b64encode
 
-from matplotlib.style import use
-
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, File, UploadFile
 from fastapi.responses import StreamingResponse
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
@@ -13,7 +15,7 @@ from sqlalchemy.orm import Session
 
 from database import query, model, schemas
 from database.db_config import SessionLocal, engine
-
+from utils import hash, helper
 
 model.Base.metadata.create_all(bind=engine)
 file_path = "./database/a.pdf"
@@ -28,12 +30,6 @@ def get_db():
     finally:
         db.close()
 
-def read_in_chunks(file_object, chunk_size=1024):
-    while True:
-        data = file_object.read(chunk_size)
-        if not data:
-            break
-        yield data
 
 def iterfile():
     f = open(file_path, mode="rb")
@@ -52,7 +48,7 @@ def iterfile():
 
 
 
-@app.get("/", response_class=FileResponse)
+@app.get("/download", response_class=FileResponse)
 async def main():
     #return StreamingResponse(iterfile())
     return file_path
@@ -72,14 +68,51 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 @app.post("/login")
 def login_validation(user: schemas.User, db: Session = Depends(get_db)):
-    print(user.user_name)
     db_user = query.get_user_by_username(db, user.user_name)
-    hashed_pass =  user.password
-    password_ckeck = 
-    result = True
-    return db_user
-# # return user type as response
+    if db_user==None:
+        raise HTTPException(status_code=404, detail="User Not Found")
+    hashed_pass =  hash.hash_passpord(user.password)
+    password_ckeck = db_user.password == hashed_pass
+    if password_ckeck is False:
+        raise HTTPException(status_code=404, detail="Password doesn't match")
+    return db_user.user_type
 
+@app.post("/uploadFile")
+async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    print(file)
+    filename = file.filename
+    root_name, file_type = os.path.splitext(filename)
+    upload_date_time = datetime.datetime.now()
+    user_ip = helper.get_ip()
+    try:
+        contents = await file.read()
+        file_size = len(contents)
+        if file_size > 10485760:
+            raise HTTPException(status_code=403, detail="Mam 10 MiB File Allowed")
+        with open(file.filename, 'wb') as f:
+            f.write(contents)
+        
+        file_hash = str(hash.hash_file(filename))
+        print(file_hash)
+        status = "Block"
+    except Exception:
+        return {"message": "There was an error uploading the file"}
+    finally:
+        await file.close()
+    
+    with open(filename, 'rb') as file_data:
+        bytes_content = file_data.read()
+    data = base64.b64encode(bytes_content).decode('utf-8')
+   
+    d2 = base64.b64decode(data) # file download er somoy lagbe
+    #print(bytes_content)
+    #print(bytes_content)
+    return query.upload_file(db, data, root_name, file_size, file_type, upload_date_time, file_hash, user_ip, status ) 
+
+@app.get("/fileType/{file_id}")
+def get_file_type(file_id:int, db: Session = Depends(get_db)):
+    db_file = query.get_file_type_by_file_id(db, file_id)
+    return {"file_name":db_file.file_name, "file_type":db_file.file_type}
 # #Admin API
 # @app.get("/requests")
 # # get all pending requests
@@ -94,7 +127,6 @@ def login_validation(user: schemas.User, db: Session = Depends(get_db)):
 # @app.get("/checkHash")
 # # check hash from https://www.tu-chemnitz.de/informatik/DVS/blocklist/
 
-# @app.post("/uploadFile")
 # # Add selected file to the database and return the corresponding url
 
 # @app.get("/files/{user_id}")

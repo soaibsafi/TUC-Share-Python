@@ -1,4 +1,5 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, BLOB
+from ast import Bytes
+from sqlalchemy import Column, ForeignKey, Integer, LargeBinary, String, DateTime, BLOB
 from sqlalchemy.orm import relationship
 
 from .db_config import Base
@@ -19,7 +20,7 @@ class FileInfo(Base):
     __tablename__ = "file_info"
 
     file_id = Column(Integer, primary_key=True, index=True)
-    file = Column(BLOB)
+    file = Column(String)
     file_name = Column(String)
     file_size = Column(Integer)
     file_type = Column(String)
