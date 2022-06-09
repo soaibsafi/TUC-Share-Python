@@ -9,7 +9,7 @@ import "assets/scss/argon-design-system-react.scss?v1.1.0";
 
 import Landing from "views/Landing.js";
 import Login from "views/Login.js";
-import Profile from "views/Profile.js";
+// import Profile from "views/Profile.js";
 import Register from "views/Register.js";
 import AdminPanel from "views/AdminPanel.js";
 

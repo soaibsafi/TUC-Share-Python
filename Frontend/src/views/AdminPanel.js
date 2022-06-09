@@ -2,7 +2,18 @@
 import React from "react";
 
 // reactstrap components
-import {Button, Card, Container, Row, Col, NavItem, Nav, Table, CustomInput, FormGroup} from "reactstrap";
+import {
+  // Button,
+  Card,
+  Container,
+  Row,
+  Col,
+  // NavItem,
+  // Nav,
+  Table,
+  CustomInput,
+  // FormGroup
+} from "reactstrap";
 
 // core components
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
@@ -30,7 +41,7 @@ class AdminPanel extends React.Component {
   }
 
   logoutAction() {
-    var that = this;
+    // var that = this;
     debugger;
     this.props.history.push({pathname: "/"});
     // that.setState({token: ""}, () => {

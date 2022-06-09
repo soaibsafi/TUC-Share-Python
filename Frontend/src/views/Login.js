@@ -35,8 +35,10 @@ import {
 } from "reactstrap";
 
 // core components
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
-import SimpleFooter from "components/Footers/SimpleFooter.js";
+// import DemoNavbar from "components/Navbars/DemoNavbar.js";
+// import SimpleFooter from "components/Footers/SimpleFooter.js";
+
+import {login} from "../API/utils";
 
 class Login extends React.Component {
   componentDidMount() {
@@ -63,12 +65,18 @@ class Login extends React.Component {
 
   loginAction() {
 
-    // var data = {
-    //   'username': that.state.username,
-    //   'password': that.state.password
-    // }
-    this.props.history.push({ pathname: "/profile-page" });
-    console.log(this.state.username)
+    var that = this;
+    var data = {
+      "username": that.state.username,
+      "password": that.state.password
+    }
+
+    login(data).then(response => {
+      console.log(response)
+    })
+
+    // this.props.history.push({ pathname: "/profile-page" });
+    // console.log(this.state.username)
     // login(data).then(response => {
     //   if (response.status === 'SUCCESS') {
     //     if (response.role === "Admin") that.props.history.push({ pathname: redirectadminpath, state: { token: response.token, uid:  response.uid} });
@@ -81,8 +89,11 @@ class Login extends React.Component {
 
   }
   onChange(val, type){
-    if(type == "email") {
+    if(type === "username") {
       this.setState({ username: val })
+    }
+    else if(type === "password"){
+      this.setState({ password: val })
     }
   }
   render() {
@@ -121,7 +132,7 @@ class Login extends React.Component {
                                 <i className="ni ni-single-02" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder="Email" type="email" onChange={(e, type) => this.onChange(`${e.target.value}`, "email")} />
+                            <Input placeholder="Username" type="username" onChange={(e, type) => this.onChange(`${e.target.value}`, "username")} />
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
@@ -135,6 +146,7 @@ class Login extends React.Component {
                               placeholder="Password"
                               type="password"
                               autoComplete="off"
+                              onChange={(e, type) => this.onChange(`${e.target.value}`, "password")}
                             />
                           </InputGroup>
                         </FormGroup>
@@ -155,7 +167,7 @@ class Login extends React.Component {
                     <Col xs="6">
                       <a
                         className="text-light"
-                        href="#pablo"
+                        href="#asguest"
                         onClick={this.loginAction}
                       >
                         <small>Or upload as guest</small>
@@ -164,7 +176,7 @@ class Login extends React.Component {
                     <Col className="text-right" xs="6">
                       <a
                         className="text-light"
-                        href="#pablo"
+                        href="#register"
                         onClick={this.loadRegistration}
                       >
                         <small>Create new account</small>

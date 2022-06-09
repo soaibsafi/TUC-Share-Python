@@ -35,16 +35,11 @@ import {
 } from "reactstrap";
 
 // core components
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
+// import DemoNavbar from "components/Navbars/DemoNavbar.js";
 
 import {createNewUser} from "../API/utils";
 
 class Register extends React.Component {
-  componentDidMount() {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    this.refs.main.scrollTop = 0;
-  }
 
   constructor(props) {
     super(props);
@@ -59,6 +54,14 @@ class Register extends React.Component {
     this.createUser = this.createUser.bind(this);
     this.onChange = this.onChange.bind(this);
   }
+
+  componentDidMount() {
+    document.documentElement.scrollTop = 0;
+    document.scrollingElement.scrollTop = 0;
+    this.refs.main.scrollTop = 0;
+  }
+
+
 
   onChange(val, type){
     if(type === "username") {
@@ -81,6 +84,7 @@ class Register extends React.Component {
       "password": that.state.password,
       "user_type": that.state.usertype
     }
+
     createNewUser(data).then(response => {
       if (response.statusText === 'OK' && response.status === 200) {
         console.log(response.data)
@@ -104,7 +108,7 @@ class Register extends React.Component {
   render() {
     return (
       <>
-        <DemoNavbar />
+        {/*<DemoNavbar />*/}
         <main ref="main">
           <section className="section section-shaped section-lg">
             <div className="shape shape-style-1 bg-gradient-default">
@@ -117,7 +121,7 @@ class Register extends React.Component {
               <span />
               <span />
             </div>
-            <Container className="pt-lg-9">
+            <Container className="pt-lg-8">
               <Row className="justify-content-center">
                 <Col lg="5">
                   <Card className="bg-secondary shadow border-0">
