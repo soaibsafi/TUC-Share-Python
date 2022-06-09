@@ -67,17 +67,17 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 @app.post("/login")
 def login_validation(user: Dict[str, str], db: Session = Depends(get_db)):
-  username = user["username"]
-  password = user["password"]
-  print(user)
-  db_user = query.get_user_by_username(db, username)
-  if db_user==None:
-    raise HTTPException(status_code=404, detail="User Not Found")
-  hashed_pass = hash.hash_passpord(password)
-  password_ckeck = db_user.password == hashed_pass
-  if password_ckeck is False:
-    raise HTTPException(status_code=404, detail="Password doesn't match")
-  return db_user.user_type
+    username = user["username"]
+    password = user["password"]
+    print(user)
+    db_user = query.get_user_by_username(db, username)
+    if db_user==None:
+        raise HTTPException(status_code=404, detail="User Not Found")
+    hashed_pass = hash.hash_passpord(password)
+    password_ckeck = db_user.password == hashed_pass
+    if password_ckeck is False:
+        raise HTTPException(status_code=404, detail="Password doesn't match")
+    return db_user.user_type
 
 @app.post("/uploadFile")
 async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
