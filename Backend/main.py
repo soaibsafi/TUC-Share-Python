@@ -48,11 +48,6 @@ def get_db():
     finally:
         db.close()
 
-@app.get("/download/{fname}", response_class=FileResponse)
-async def main():
-    return StreamingResponse(helper.get_download_file())
-    #return file_path
-
 @app.post("/users/", response_model=schemas.User)
 async def create_user(user: schemas.User, db: Session = Depends(get_db)):
     print(user)
@@ -108,15 +103,23 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
         bytes_content = file_data.read()
     data = base64.b64encode(bytes_content).decode('utf-8')
 
-    d2 = base64.b64decode(data) # file download er somoy lagbe
-    return query.upload_file(db, data, root_name, file_size, file_type, upload_date_time, file_hash, user_ip, status )
+    #d2 = base64.b64decode(data) # file download er somoy lagbe
+    return query.upload_file(
+        db, 
+        data, 
+        root_name, 
+        file_size, 
+        file_type, 
+        upload_date_time, 
+        file_hash, 
+        user_ip, 
+        status )
 
 @app.get("/fileType/{file_id}")
 def get_file_type(file_id:int, db: Session = Depends(get_db)):
     db_file = query.get_file_type_by_file_id(db, file_id)
     return {"file_name":db_file.file_name, "file_type":db_file.file_type}
 
-# #Admin API
 @app.post("/requests")
 def get_pending_requests(reqInfo: schemas.RequestInfo, db: Session = Depends(get_db)):
     return query.add_request_info(reqInfo, db)
@@ -161,15 +164,6 @@ def get_file_info(file_id:int, db: Session = Depends(get_db)):
 def get_files_of_single_user(user_id:int, db: Session = Depends(get_db)):
     return (query.get_all_files_of_a_user(user_id, db), {"status":"SUCESS"})
 
-
-
-
-@app.get("/guestDownload/", response_class=FileResponse)
-async def download_as_guest(file_url: str, db: Session = Depends(get_db)):
-    file_path = query.write_single_file(file_url, db)
-    return StreamingResponse(helper.get_guest_download_file(file_path))
-
-
 @app.get("/download/", response_class=FileResponse)
 async def download_as_user(file_url: str, user_type: str, db: Session = Depends(get_db)):
     if user_type == "User":
@@ -179,9 +173,12 @@ async def download_as_user(file_url: str, user_type: str, db: Session = Depends(
         file_path = query.write_single_file(file_url, db)
         return StreamingResponse(helper.get_guest_download_file(file_path))
 
-
 @app.get("/clearCache")
 def clear_cache():
     helper.clear_cache()
     return {"Cache clear successful"}
 
+@app.get("/guestDownload/", response_class=FileResponse)
+async def download_as_guest(file_url: str, db: Session = Depends(get_db)):
+    file_path = query.write_single_file(file_url, db)
+    return StreamingResponse(helper.get_guest_download_file(file_path))
