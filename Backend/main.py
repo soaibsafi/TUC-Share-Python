@@ -91,7 +91,7 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
         file_size = len(contents)
         if file_size > 10485760:
             raise HTTPException(status_code=403, detail="Mam 10 MiB File Allowed")
-        with open(file.filename, 'wb') as f:
+        with open("cache/"+file.filename, 'wb') as f:
             f.write(contents)
 
         file_hash = str(hash.hash_file(filename))
@@ -99,7 +99,6 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
         url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
         s = tuc_session.get(url)
         status = s.status_code
-        s = tuc_session.put(url)
     except Exception:
         return {"message": "There was an error uploading the file"}
     finally:
@@ -110,8 +109,6 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
     data = base64.b64encode(bytes_content).decode('utf-8')
 
     d2 = base64.b64decode(data) # file download er somoy lagbe
-    #print(bytes_content)
-    #print(bytes_content)
     return query.upload_file(db, data, root_name, file_size, file_type, upload_date_time, file_hash, user_ip, status )
 
 @app.get("/fileType/{file_id}")
@@ -165,7 +162,26 @@ def get_files_of_single_user(user_id:int, db: Session = Depends(get_db)):
     return (query.get_all_files_of_a_user(user_id, db), {"status":"SUCESS"})
 
 
-# @app.get("/download")
-# # download the actual file
 
+
+@app.get("/guestDownload/", response_class=FileResponse)
+async def download_as_guest(file_url: str, db: Session = Depends(get_db)):
+    file_path = query.write_single_file(file_url, db)
+    return StreamingResponse(helper.get_guest_download_file(file_path))
+
+
+@app.get("/download/", response_class=FileResponse)
+async def download_as_user(file_url: str, user_type: str, db: Session = Depends(get_db)):
+    if user_type == "User":
+        filepath =  query.write_single_file(file_url, db)
+        return filepath
+    else:
+        file_path = query.write_single_file(file_url, db)
+        return StreamingResponse(helper.get_guest_download_file(file_path))
+
+
+@app.get("/clearCache")
+def clear_cache():
+    helper.clear_cache()
+    return {"Cache clear successful"}
 

@@ -1,4 +1,6 @@
 import requests
+import os
+import glob
 
 def get_ip():
     response = requests.get(url = "https://geolocation-db.com/json/")
@@ -11,10 +13,10 @@ def get_blocking_status(hash):
     return response.text
 
 
-def get_download_file(file_path):
+def get_guest_download_file(file_path):
     f = open(file_path, mode="rb")
     while True:
-        data = f.read(1024)
+        data = f.read(64)
         if not data:
             break
         yield data
@@ -25,3 +27,11 @@ def get_download_file(file_path):
     #         for i in range(52):
     #             time.sleep(0.001)
     #             yield from file_like
+
+
+def clear_cache():
+    cache_dir = "./cache/"
+    filelist = glob.glob(os.path.join(cache_dir, "*"))
+    print(filelist)
+    for f in filelist:
+        os.remove(f)

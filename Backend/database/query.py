@@ -4,6 +4,7 @@ from database.db_config import engine
 
 from . import model, schemas
 from utils import hash
+import base64
 
 
 def create_user(db: Session, user: schemas.User):
@@ -88,3 +89,17 @@ def get_all_files_of_a_user(user_id:int, db: Session):
         model.FileInfo.user_ip,
         model.FileInfo.user_id
         ).filter(model.FileInfo.user_id == user_id).all()
+
+
+def write_single_file(file_hash:str, db: Session):
+    f = db.query(model.FileInfo).filter(model.FileInfo.file_hash == file_hash).first()
+    file_contents = base64.b64decode(f.file)
+    filepath = 'cache/'+f.file_name+f.file_type
+    try:
+        with open(filepath, 'wb') as fl:
+            fl.write(file_contents)
+    except Exception:
+        return {"message": "There was an error downloading the file"}
+    finally:
+        fl.close()
+    return filepath
