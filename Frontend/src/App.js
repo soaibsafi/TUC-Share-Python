@@ -23,10 +23,10 @@ render(){
         <div className="App">
           <div className="container py-4">
             <div className="row">
-              <Route path="/" exact component={loginView} />
+              <Route path="/login" exact component={loginView} />
               <Route path="/registration" exact component={Registration}/>
               <Route path="/login" exact component={loginView} />
-              <Route path="/landing-page" exact component={LandingPage}/>
+              <Route path="/" exact component={LandingPage}/>
 
 
               <Route path="/adminpanel" exact component={adminPanel}/>

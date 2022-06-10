@@ -30,12 +30,23 @@ class LandingPage extends React.Component {
     this.addFile = this.addFile.bind(this);
     this.loadFillData = this.loadFillData.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
+    this.loadRegister = this.loadRegister.bind(this);
+    this.loadLogin = this.loadLogin.bind(this);
 
 
 
-    this.loginAction = this.loginAction.bind(this);
-    this.onChangeHandler = this.onChangeHandler.bind(this);
-    this.createUser = this.createUser.bind(this);
+
+    // this.loginAction = this.loginAction.bind(this);
+    // this.onChangeHandler = this.onChangeHandler.bind(this);
+    // this.createUser = this.createUser.bind(this);
+  }
+
+  loadRegister(){
+    this.props.history.push({ pathname: "/registration"});
+  }
+
+  loadLogin(){
+    this.props.history.push({ pathname: "/login"});
   }
 
   uploadFile(){
@@ -127,7 +138,6 @@ class LandingPage extends React.Component {
           <div className="container p-33 border"
                style={{width: '500px', borderRadius: '15px', padding: '50px', margin: '5% auto', boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}}>
             <div className="form-group">
-              {/*<h3>Upload Files</h3>*/}
               <h3 style={{textShadow: '-4px 3px 2px rgba(162, 155, 254, 0.29)', color: 'rgb(87, 101, 116)'}}>Upload a file</h3>
               <input type="file" id="myFile" name="filename" onChange={this.selectFile}/>
               <br/><br/>
@@ -147,29 +157,11 @@ class LandingPage extends React.Component {
               </table>
               <br/><br/>
               <button className="btn btn-info" style={{width: '85%'}} onClick={this.uploadFile}>Upload</button>
-              {/*<h2 style={{textShadow: '-4px 3px 2px rgba(162, 155, 254, 0.29)', color: 'rgb(87, 101, 116)'}}>Upload a file</h2>*/}
-              {/*<br/>*/}
-              {/*<div className="input-group-btn">*/}
-              {/*  <label htmlFor="files" className="btn btn-default">browse</label>*/}
-              {/*  <input id="files" type="file" className="btn btn-default" style="visibility:hidden;"/>*/}
-              {/*</div>*/}
-              {/*<TextField style={{width: '85%'}} id="username" label="Username" variant="outlined"*/}
-              {/*           onChange={(e) => this.onChangeHandler(e, "username")}/>*/}
-              {/*<br/><br/>*/}
-              {/*<TextField style={{width: '85%'}} id="password" label="Password" type="Password" variant="outlined"*/}
-              {/*           onChange={(e) => this.onChangeHandler(e, "password")}/>*/}
-              {/*<br/><br/>*/}
-              {/*<button className="btn btn-info" style={{width: '85%'}} onClick={this.loginAction}>Login</button>*/}
-              {/*<br/><br/>*/}
-              {/*<button className="btn btn-info" style={{width: '85%'}} onClick={this.createUser}>Create a new user</button>*/}
+              <br/><br/>
+              <button className="btn btn-info" style={{width: '85%'}} onClick={this.loadRegister}>Register</button>
+              <br/><br/>
+              <button className="btn btn-info" style={{width: '85%'}} onClick={this.loadLogin}>Login</button>
             </div>
-
-
-
-
-
-
-
           </div>
           <div>
 
