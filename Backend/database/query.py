@@ -73,10 +73,19 @@ def add_request_info(reqInfo: schemas.RequestInfo, db: Session):
     db.refresh(db_req)
     return db_req
 
+def delete_request_by_id(req_id: int, db: Session):
+    req = db.query(model.RequestInfo).filter(model.RequestInfo.req_id == req_id).first()
+    if req==None:
+        return False
+    db.delete(req)
+    db.commit()
+    return True
+
 def get_all_pending_request(db: Session):
     data = db.query(model.RequestInfo).all()
     print(data)
     return data
+
 
 def get_all_files_of_a_user(user_id:int, db: Session):
     return db.query(

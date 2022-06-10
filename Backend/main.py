@@ -120,13 +120,18 @@ def get_file_type(file_id:int, db: Session = Depends(get_db)):
     db_file = query.get_file_type_by_file_id(db, file_id)
     return {"file_name":db_file.file_name, "file_type":db_file.file_type}
 
-@app.post("/requests")
+@app.post("/request")
 def get_pending_requests(reqInfo: schemas.RequestInfo, db: Session = Depends(get_db)):
     return query.add_request_info(reqInfo, db)
 
 @app.get("/requests")
 def get_pending_requests(db: Session = Depends(get_db)):
     return query.get_all_pending_request(db)
+
+@app.delete("/request")
+def delete_request(request_id: int, db: Session = Depends(get_db)):
+    return query.delete_request_by_id(request_id, db)
+
 
 @app.delete("/unblock")
 def unblock_file(file_hash: str):
