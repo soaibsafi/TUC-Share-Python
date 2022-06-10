@@ -4,8 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 
-import loginView from './view/loginView';
+import loginView from './view/Login';
 import Registration from './view/Registration'
+import LandingPage from './view/LandingPage'
+
 import adminPanel from './view/admin/adminPanel'
 import pupilPanel from "./view/pupil/pupilPanel";
 import teacherPanel from "./view/teacher/teacherPanel";
@@ -24,6 +26,7 @@ render(){
               <Route path="/" exact component={loginView} />
               <Route path="/registration" exact component={Registration}/>
               <Route path="/login" exact component={loginView} />
+              <Route path="/landing-page" exact component={LandingPage}/>
 
 
               <Route path="/adminpanel" exact component={adminPanel}/>
