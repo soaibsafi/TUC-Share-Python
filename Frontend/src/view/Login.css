@@ -27,3 +27,12 @@
     padding: 5px;
     margin-top: 10px;
 }
+
+
+.container{
+    width: 30vw;
+    borderRadius: 15px;
+    padding: 50px;
+    margin: 5% auto;
+    boxShadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
