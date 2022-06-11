@@ -1,13 +1,5 @@
 import React from 'react'
 import {getRequests } from "../api/utils";
-// import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
-//
-// import UserTab from './Component/UserTab'
-// import SubjectTab from './Component/SubjectTab'
-// import PupilTab from './Component/PupilTab'
-
-// import 'react-tabs/style/react-tabs.css';
-// import ClassTable from './Component/ClassTable';
 
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -39,6 +31,16 @@ class adminPanel extends React.Component {
     this.loadFillData = this.loadFillData.bind(this);
     this.openPopup = this.openPopup.bind(this);
     this.switchPopup = this.switchPopup.bind(this);
+    this.reloadRequestList = this.reloadRequestList.bind(this);
+  }
+
+  reloadRequestList(){
+    getRequests().then(res => {
+      console.log(res)
+      if (res.status === 200 && res.statusText === "OK") {
+        this.setState({requestList: res.data})
+      }
+    });
   }
 
   switchPopup(){
@@ -75,12 +77,7 @@ class adminPanel extends React.Component {
         that.props.history.go(1);
       };
     }
-    getRequests().then(res => {
-      console.log(res)
-      if (res.status === 200 && res.statusText === "OK") {
-        this.setState({requestList: res.data})
-      }
-    });
+    that.reloadRequestList()
   }
 
   render() {
@@ -127,12 +124,13 @@ class adminPanel extends React.Component {
                 <RequestDetailsPopup
                     requestDetails={that.state.requestDetails}
                     popupHeaderText={that.state.popupHeaderText}
-                    closePopup={that.closePopup}
+                    reloadList={this.reloadRequestList}
+                    closePopup={that.switchPopup}
                 />
             ) : null}
             <div
                 style={{width: "100%", backgroundColor: "#16a085", height: "25px", position: "fixed", bottom: "0", textAlign: "right"}}>
-              <label style={{color: 'rgb(223, 230, 233)', paddingTop: '0px', textShadow: '-4px 3px 2px rgba(241, 196, 15, 0.29)'}}>You are logged in as pupil</label>
+              {/*<label style={{color: 'rgb(223, 230, 233)', paddingTop: '0px', textShadow: '-4px 3px 2px rgba(241, 196, 15, 0.29)'}}>You are logged in as pupil</label>*/}
             </div>
           </div>
         </div>

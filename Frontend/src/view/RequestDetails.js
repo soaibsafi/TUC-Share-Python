@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import {withStyles} from "@material-ui/core/styles";
+import {checkFileStatus, blockFile, deleteRequest} from "../api/utils";
 
 const styles = theme => ({
   root: {},
@@ -21,29 +21,63 @@ class RequestDetails extends React.Component {
     this.loadFillData = this.loadFillData.bind(this);
     this.close = this.close.bind(this);
     this.approve = this.approve.bind(this);
+    this.reject = this.reject.bind(this);
   }
 
   approve(){
+    var that = this
+    var hashid = this.state.requestDetails[0].file_hash
+    var reqID = this.state.requestDetails[0].req_id
 
+    checkFileStatus(hashid).then(res => {
+      if(res.status === 200 && res.statusText === 'OK'){
+        if(res.data.filestatus === "Blocked"){
+          blockFile(hashid).then(res => {
+            if(res.data.code === 210){
+              deleteRequest(reqID).then(res => {
+                alert("This file has been blocked successfully")
+                that.close()
+              })
+            }
+          })
+        }
+      }
+    })
+  }
+
+  reject(){
+    var that = this
+    var reqID = this.state.requestDetails[0].req_id
+
+    deleteRequest(reqID).then(res => {
+      alert("This file has been rejected successfully")
+      that.close()
+    })
   }
 
   close() {
-    this.props.closePopup();
+    var that = this
+    that.props.closePopup();
+    that.props.reloadList();
+    // getRequests().then(res => {
+    //   console.log(res)
+    //   if (res.status === 200 && res.statusText === "OK") {
+    //     this.setState({requestList: res.data}, () => {that.props.closePopup();})
+    //   }
+    // });
+
   }
 
   loadFillData() {
     if (this.state.requestDetails.length) {
-
       return this.state.requestDetails.map(data => {
-        console.log(data)
         var filesize = data.file_size / 1024
         var size = filesize > 1023 ? filesize/1024 : filesize
         var sizeMatric = filesize > 1023 ? 'MB' : 'KB'
         var reqDT = new Date(data.upload_date_time)
         var requestDate = reqDT.toLocaleString()
-        // debugger
         return (
-            <div>
+            <div key={data.file_hash}>
               <label>File Name: {data.file_name}</label>
               <br/>
               <label>Size: {size.toFixed(2)} {sizeMatric} </label>
@@ -71,7 +105,8 @@ class RequestDetails extends React.Component {
             </div>
             <div className="popup-button-area">
               <button className='btn btn-outline-primary' onClick={this.approve}>{"Approve"}</button>
-              <button className='btn btn-outline-danger' onClick={this.close}>{"Reject"}</button>
+              <button className='btn btn-outline-danger' onClick={this.reject}>{"Reject"}</button>
+              <button className='btn btn-outline-danger' onClick={this.close}>{"Close"}</button>
             </div>
           </div>
         </div>
