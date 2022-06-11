@@ -164,7 +164,7 @@ class LandingPage extends React.Component {
           }}
         >
           <div className="form-group">
-            <h3>Upload a file</h3>
+            <h3 style={{textShadow: '-4px 3px 2px rgba(162, 155, 254, 0.29)', color: '#005f50'}}>Upload a file</h3>
             <input
               type="file"
               id="myFile"

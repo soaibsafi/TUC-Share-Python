@@ -27,3 +27,16 @@
     padding: 5px;
     margin-top: 10px;
 }
+
+
+.createButton {
+    font-size: 20px;
+    font-weight: bold;
+    display: inline-block;
+    margin: 5px auto;
+    background-color: #005f50;
+}
+
+.createButton:hover{
+    background-color: #0e7969;
+}

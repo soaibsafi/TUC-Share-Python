@@ -61,17 +61,19 @@ class loginView extends React.Component {
 
   render() {
     return (
-        <div className="parent-div fill-window">
-          <div style={{width: "100%", backgroundColor: "#16a085", height: "60px"}}>
-            {/*<h1>E-School Cube</h1>*/}
-          </div>
+        <div className="fill-window">
+          <div
+          style={{ width: "100%", backgroundColor: "#005f50", height: "60px" }}
+        >
+          <h1>TUC Share</h1>
+        </div>
           <div className="title-area">
 
           </div>
           <div className="container p-33 border"
                style={{width: '500px', borderRadius: '15px', padding: '50px', margin: '5% auto', boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'}}>
             <div className="form-group">
-              <h2 style={{textShadow: '-4px 3px 2px rgba(162, 155, 254, 0.29)', color: 'rgb(87, 101, 116)'}}>Registration</h2>
+              <h2 style={{textShadow: '-4px 3px 2px rgba(162, 155, 254, 0.29)', color: '#005f50'}}>Registration</h2>
               <br/>
               <TextField style={{width: '85%'}} id="username" label="Username" variant="outlined"
                          onChange={(e) => this.onChangeHandler(e, "username")}/>
@@ -82,17 +84,21 @@ class loginView extends React.Component {
               <TextField style={{width: '85%'}} id="password" label="Password" type="Password" variant="outlined"
                          onChange={(e) => this.onChangeHandler(e, "password")}/>
               <br/><br/>
-              <button className="btn btn-info" style={{width: '85%'}} onClick={this.createUser}>Create</button>
+              <button className="btn btn-info signupLoginButton" style={{width: '85%'}} onClick={this.createUser}>Create</button>
             </div>
           </div>
           <div>
 
           </div>
           <div
-              style={{width: "100%", backgroundColor: "#16a085", height: "60px", position: "fixed", bottom: "0"}}>
-            <label style={{color: 'rgb(223, 230, 233)', paddingTop: '21px', textShadow: '-4px 3px 2px rgba(241, 196, 15, 0.29)', fontWeight: 'bold'}}>Welcome to E-School Cube</label>
-
-          </div>
+          style={{
+            width: "100%",
+            backgroundColor: "#005f50",
+            height: "60px",
+            position: "fixed",
+            bottom: "0",
+          }}
+        ></div>
         </div>
 
     )
