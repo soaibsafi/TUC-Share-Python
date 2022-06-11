@@ -4,6 +4,7 @@ import os
 import asyncio
 import datetime
 
+import aiofiles
 import base64
 from base64 import b64encode
 
@@ -75,7 +76,7 @@ def login_validation(user: Dict[str, str], db: Session = Depends(get_db)):
     return db_user.user_type
 
 @app.post("/uploadFile")
-async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
+async def upload_file(file: UploadFile = File(...), db : Session = Depends(get_db)):
     print(file)
     filename = file.filename
     root_name, file_type = os.path.splitext(filename)
@@ -95,7 +96,7 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
         s = tuc_session.get(url)
         status = s.status_code
     except Exception:
-        return {"message": "There was an error uploading the file"}
+        return {"filehash": "58140fb61e19df0f71ad6ac47617f1b931f5c69de4eb561020c9d2cdcfb5527e"} # TODO : remove this hash id
     finally:
         await file.close()
 
@@ -105,14 +106,14 @@ async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db
 
     #d2 = base64.b64decode(data) # file download er somoy lagbe
     return query.upload_file(
-        db, 
-        data, 
-        root_name, 
-        file_size, 
-        file_type, 
-        upload_date_time, 
-        file_hash, 
-        user_ip, 
+        db,
+        data,
+        root_name,
+        file_size,
+        file_type,
+        upload_date_time,
+        file_hash,
+        user_ip,
         status )
 
 @app.get("/fileType/{file_id}")
@@ -142,14 +143,21 @@ def unblock_file(file_hash: str):
 @app.put("/block")
 def block_file(file_hash: str):
     url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
-    status = tuc_session.put(url)
-    return status.status_code
+#     status = tuc_session.put(url)
+    status = {
+    'code': 210,
+    'fstatus': 'Blocked'
+    }
+    return status
 
 @app.get("/checkStatus")
 def check_file_status(file_hash: str):
     url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
-    status = tuc_session.get(url)
-    return status.status_code
+#     status = tuc_session.get(url)
+    status = {
+    'filestatus' : 'Blocked'
+    }
+    return status
 
 @app.delete("/file/{file_id}")
 def delete_file(file_id:int, db: Session = Depends(get_db)):

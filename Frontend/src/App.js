@@ -4,9 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 
-import loginView from './view/Login';
+import Login from './view/Login';
 import Registration from './view/Registration'
 import LandingPage from './view/LandingPage'
+import AdminPage from './view/Admin'
 
 import adminPanel from './view/admin/adminPanel'
 import pupilPanel from "./view/pupil/pupilPanel";
@@ -15,6 +16,7 @@ import manageTest from './view/teacher/manageTest'
 
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import Admin from "./view/Admin";
 
 export default class App extends React.Component {
 render(){
@@ -23,10 +25,11 @@ render(){
         <div className="App">
           <div className="container py-4">
             <div className="row">
-              <Route path="/login" exact component={loginView} />
-              <Route path="/registration" exact component={Registration}/>
-              <Route path="/login" exact component={loginView} />
               <Route path="/" exact component={LandingPage}/>
+              <Route path="/login" exact component={Login} />
+              <Route path="/registration" exact component={Registration}/>
+              <Route path='/admin' exact component={Admin}/>
+
 
 
               <Route path="/adminpanel" exact component={adminPanel}/>

@@ -40,7 +40,7 @@ class LoginPage extends React.Component {
     login(data).then(response => {
       console.log(response)
       if(response.status === 200 && response.statusText === "OK"){
-        this.props.history.push({ pathname: "/adminpanel", state: {usertype: response.data} });
+        this.props.history.push({ pathname: "/admin", state: {usertype: response.data} });
       }
     })
 
