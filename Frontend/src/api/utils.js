@@ -3,6 +3,18 @@ import axios from "axios"
 const host = "http://127.0.0.1:8000/"
 var url;
 
+
+
+export async function getFileInfo(hash){
+  url = host + "fileInfo/?file_hash=" + hash;
+  try{
+    const response = await axios.get(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
 export async function deleteRequest(reqID){
   url = host + "request?request_id=" + reqID;
   try{

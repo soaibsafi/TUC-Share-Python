@@ -7,7 +7,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Login from './view/Login';
 import Registration from './view/Registration'
 import LandingPage from './view/LandingPage'
-import AdminPage from './view/Admin'
+import Admin from "./view/Admin";
+import Download from "./view/Download"
 
 import adminPanel from './view/admin/adminPanel'
 import pupilPanel from "./view/pupil/pupilPanel";
@@ -16,10 +17,14 @@ import manageTest from './view/teacher/manageTest'
 
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import Admin from "./view/Admin";
+
 
 export default class App extends React.Component {
+
 render(){
+
+  const downloadRegx = "^[a-f0-9]{64}$"
+  const downloadPath =  "/download/";
   return (
       <Router>
         <div className="App">
@@ -29,6 +34,7 @@ render(){
               <Route path="/login" exact component={Login} />
               <Route path="/registration" exact component={Registration}/>
               <Route path='/admin' exact component={Admin}/>
+              <Route path={downloadPath}  component={Download}/>
 
 
 

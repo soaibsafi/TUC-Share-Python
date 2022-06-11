@@ -5,11 +5,7 @@ import './Admin.css'
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import * as micon from '@material-ui/icons';
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
 import RequestDetailsPopup from "./RequestDetails";
-import {getAllTests} from "../api/PupilAPI";
 
 const styles = theme => ({
   root: {},
