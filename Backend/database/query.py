@@ -42,7 +42,7 @@ def upload_file(db: Session, file, file_name, file_size, file_type, upload_date_
     db.refresh(db_file)
     return db_file
 
-def get_file_info(db: Session, file_id: int):
+def get_file_info(db: Session, file_hash: str):
     return db.query(
         model.FileInfo.file_name,
         model.FileInfo.file_type,
@@ -52,7 +52,7 @@ def get_file_info(db: Session, file_id: int):
         model.FileInfo.status,
         model.FileInfo.user_ip,
         model.FileInfo.user_id
-        ).filter(model.FileInfo.file_id == file_id).first()
+        ).filter(model.FileInfo.file_hash == file_hash).first()
 
 def delete_file_by_file_id(file_id: int, db: Session):
     file = db.query(model.FileInfo).filter(model.FileInfo.file_id == file_id).first()

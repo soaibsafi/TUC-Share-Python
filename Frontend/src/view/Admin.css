@@ -1,0 +1,53 @@
+.reqTitle {
+  text-shadow: -4px 3px 2px rgba(162, 155, 254, 0.29);
+  color: #005f50;
+  font-size: 2rem;
+  margin: 5px auto;
+}
+
+.requestTable{
+    width: 50vw;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+.reqDetailsLabel{
+  font-size: 1.3rem;
+}
+
+.approve {
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 10px auto;
+  background-color: #005f50;
+  color: white;
+}
+
+.approve:hover{
+  background-color: #0e7969;
+}
+
+.reject {
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 10px auto;
+  background-color: #d60000;
+  color: white;
+}
+
+.reject:hover{
+  background-color: #ed1010;
+}
+
+.cancel {
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 10px auto;
+  color: white;
+}
+
+.cancel:hover{
+}

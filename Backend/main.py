@@ -166,9 +166,9 @@ def delete_file(file_id:int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="File not found")
     return {"detail":"Successfully Deleted"}
 
-@app.get("/fileInfo/{file_id}")
-def get_file_info(file_id:int, db: Session = Depends(get_db)):
-    db_file = query.get_file_info(db, file_id=file_id)
+@app.get("/fileInfo/")
+def get_file_info(file_hash:str, db: Session = Depends(get_db)):
+    db_file = query.get_file_info(db, file_hash=file_hash)
     if db_file is None:
         raise HTTPException(status_code=404, detail="File not found")
     return db_file

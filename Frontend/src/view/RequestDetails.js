@@ -1,5 +1,7 @@
 import React from 'react';
 import '../App.css';
+import './Admin.css'
+
 import {checkFileStatus, blockFile, deleteRequest} from "../api/utils";
 
 const styles = theme => ({
@@ -77,7 +79,7 @@ class RequestDetails extends React.Component {
         var reqDT = new Date(data.upload_date_time)
         var requestDate = reqDT.toLocaleString()
         return (
-            <div key={data.file_hash}>
+            <div key={data.file_hash} className='reqDetailsLabel'>
               <label>File Name: {data.file_name}</label>
               <br/>
               <label>Size: {size.toFixed(2)} {sizeMatric} </label>
@@ -103,10 +105,10 @@ class RequestDetails extends React.Component {
             <div className="ag-theme-alpine" >
               {this.loadFillData()}
             </div>
-            <div className="popup-button-area">
-              <button className='btn btn-outline-primary' onClick={this.approve}>{"Approve"}</button>
-              <button className='btn btn-outline-danger' onClick={this.reject}>{"Reject"}</button>
-              <button className='btn btn-outline-danger' onClick={this.close}>{"Close"}</button>
+            <div className="btn-group reqButton" role="group">
+              <button className='btn mr-2 approve' onClick={this.approve}>{"Approve"}</button>
+              <button className='btn reject mr-2' onClick={this.reject}>{"Reject"}</button>
+              <button className='btn btn-info cancel' onClick={this.close}>{"Close"}</button>
             </div>
           </div>
         </div>
