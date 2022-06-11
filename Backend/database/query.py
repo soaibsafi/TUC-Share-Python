@@ -82,7 +82,15 @@ def delete_request_by_id(req_id: int, db: Session):
     return True
 
 def get_all_pending_request(db: Session):
-    data = db.query(model.RequestInfo).all()
+    data = db.query(
+        model.FileInfo.file_name,
+        model.FileInfo.file_type, 
+        model.FileInfo.file_size,
+        model.FileInfo.upload_date_time,
+        model.RequestInfo.reason,
+        model.RequestInfo.req_id
+        ).filter(model.RequestInfo.file_id == model.FileInfo.file_id).all()
+    #t = db.query(model.RequestInfo).all()
     print(data)
     return data
 
