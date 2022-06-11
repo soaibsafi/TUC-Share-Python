@@ -143,14 +143,21 @@ def unblock_file(file_hash: str):
 @app.put("/block")
 def block_file(file_hash: str):
     url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
-    status = tuc_session.put(url)
-    return status.status_code
+#     status = tuc_session.put(url)
+    status = {
+    'code': 210,
+    'fstatus': 'Blocked'
+    }
+    return status
 
 @app.get("/checkStatus")
 def check_file_status(file_hash: str):
     url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
-    status = tuc_session.get(url)
-    return status.status_code
+#     status = tuc_session.get(url)
+    status = {
+    'filestatus' : 'Blocked'
+    }
+    return status
 
 @app.delete("/file/{file_id}")
 def delete_file(file_id:int, db: Session = Depends(get_db)):

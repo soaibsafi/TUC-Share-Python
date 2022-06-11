@@ -27,16 +27,16 @@ def get_file_type_by_file_id(db: Session, file_id: int):
 
 def upload_file(db: Session, file, file_name, file_size, file_type, upload_date_time, file_hash, user_ip, status, user_id=None):
     db_file = model.FileInfo(
-            file=file, 
-            file_name=file_name, 
-            file_size=file_size, 
-            file_type=file_type, 
-            upload_date_time=upload_date_time, 
-            file_hash=file_hash, 
-            user_ip=user_ip, 
-            status=status, 
+            file=file,
+            file_name=file_name,
+            file_size=file_size,
+            file_type=file_type,
+            upload_date_time=upload_date_time,
+            file_hash=file_hash,
+            user_ip=user_ip,
+            status=status,
             user_id=user_id
-            ) 
+            )
     db.add(db_file)
     db.commit()
     db.refresh(db_file)
@@ -44,7 +44,7 @@ def upload_file(db: Session, file, file_name, file_size, file_type, upload_date_
 
 def get_file_info(db: Session, file_id: int):
     return db.query(
-        model.FileInfo.file_name, 
+        model.FileInfo.file_name,
         model.FileInfo.file_type,
         model.FileInfo.file_size,
         model.FileInfo.file_type,
@@ -84,9 +84,10 @@ def delete_request_by_id(req_id: int, db: Session):
 def get_all_pending_request(db: Session):
     data = db.query(
         model.FileInfo.file_name,
-        model.FileInfo.file_type, 
+        model.FileInfo.file_type,
         model.FileInfo.file_size,
         model.FileInfo.upload_date_time,
+        model.FileInfo.file_hash,
         model.RequestInfo.reason,
         model.RequestInfo.req_id
         ).filter(model.RequestInfo.file_id == model.FileInfo.file_id).all()
@@ -97,7 +98,7 @@ def get_all_pending_request(db: Session):
 
 def get_all_files_of_a_user(user_id:int, db: Session):
     return db.query(
-        model.FileInfo.file_name, 
+        model.FileInfo.file_name,
         model.FileInfo.file_type,
         model.FileInfo.file_size,
         model.FileInfo.file_type,
