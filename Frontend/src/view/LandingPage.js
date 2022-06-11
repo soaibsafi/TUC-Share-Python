@@ -4,10 +4,14 @@ import './LandingPage.css';
 
 import {withStyles} from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
+import IconButton from "@material-ui/core/IconButton";
+import * as micon from "@material-ui/icons";
 
 const redirectadminpath = '/adminpanel';
 const redirectteacherpath = '/teacherpanel';
 const redirectpupilpath = '/pupilpanel';
+
+
 
 const styles = theme => ({
   root: {},
@@ -23,7 +27,8 @@ class LandingPage extends React.Component {
       selectedFile: null,
       filesList: [],
       uploadFile: '',
-      hideDownloadUrl: true
+      hideDownloadUrl: true,
+
     };
 
     this.selectFile = this.selectFile.bind(this);
@@ -62,6 +67,9 @@ class LandingPage extends React.Component {
             <tr key={data.hashId}>
               <th>{data.fileName}</th>
               <th style={{display: this.state.hideDownloadUrl ? 'none' : ''}}>{data.downloadUrl}</th>
+              <td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>
+                <micon.Info style={{color: "#22a6b3", frontSize: "30"}}/>
+              </IconButton>}</td>
             </tr>
         )
       })
@@ -149,6 +157,7 @@ class LandingPage extends React.Component {
                 <tr key={"user_key1"}>
                   <th scope="col">File Name</th>
                   <th scope="col" style={{display: this.state.hideDownloadUrl ? 'none' : ''}}>Download URL</th>
+                  <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>

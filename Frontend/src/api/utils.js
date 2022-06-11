@@ -3,6 +3,17 @@ import axios from "axios"
 const host = "http://127.0.0.1:8000/"
 var url;
 
+export async function getRequests(){
+  url = host + "requests";
+
+  try{
+    const response = await axios.get(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
 export async function uploadFile(fileData){
   url = host + "uploadFile";
 
