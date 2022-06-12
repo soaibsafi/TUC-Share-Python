@@ -37,7 +37,7 @@ class adminPanel extends React.Component {
 
   loadRequestList() {
     getRequests().then((res) => {
-      console.log(res);
+      //console.log(res);
       if (res.status === 200 && res.statusText === "OK") {
         this.setState({ requestList: res.data });
       }

@@ -109,23 +109,47 @@ class LandingPage extends React.Component {
       this.state.selectedFile.name
     );
 
-    uploadFile(fileData).then((response) => {
-      console.log(response);
-      var tempList = that.state.filesList;
-      var downloadUrl =
-        "http://localhost:3000/download/" + response.data.file_hash;
-      var fileName = that.state.selectedFile.name;
-      var hashId = response.data.file_hash;
+    debugger
+    if(typeof this.state.userinfo === 'undefined'){
+      console.log("Login as guest")
+      uploadFile(fileData, "GEUST", 0).then((response) => {
+        console.log(response);
+        var tempList = that.state.filesList;
+        var downloadUrl =
+          "http://localhost:3000/download/" + response.data.file_hash;
+        var fileName = that.state.selectedFile.name;
+        var hashId = response.data.file_hash;
 
-      var obj = {
-        fileName,
-        downloadUrl,
-        hashId,
-      };
+        var obj = {
+          fileName,
+          downloadUrl,
+          hashId,
+        };
 
-      tempList.push(obj);
-      that.setState({ filesList: tempList }, console.log(that.state.filesList));
-    });
+        tempList.push(obj);
+        that.setState({ filesList: tempList }, console.log(that.state.filesList));
+      });
+    } else{
+      console.log("Login as user")
+      uploadFile(fileData, "USER", this.state.userinfo.user_id).then((response) => {
+        console.log(response);
+        var tempList = that.state.filesList;
+        var downloadUrl =
+          "http://localhost:3000/download/" + response.data.file_hash;
+        var fileName = that.state.selectedFile.name;
+        var hashId = response.data.file_hash;
+
+        var obj = {
+          fileName,
+          downloadUrl,
+          hashId,
+        };
+
+        tempList.push(obj);
+        that.setState({ filesList: tempList }, console.log(that.state.filesList));
+      });
+    }
+
   }
 
   selectFile() {
