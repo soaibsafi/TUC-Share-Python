@@ -108,13 +108,14 @@ class LandingPage extends React.Component {
       this.state.selectedFile,
       this.state.selectedFile.name
     );
+
     uploadFile(fileData).then((response) => {
       console.log(response);
       var tempList = that.state.filesList;
       var downloadUrl =
         "http://localhost:3000/download/" + response.data.file_hash;
       var fileName = that.state.selectedFile.name;
-      var hashId = response.data.fileHash;
+      var hashId = response.data.file_hash;
 
       var obj = {
         fileName,
@@ -173,7 +174,7 @@ class LandingPage extends React.Component {
             }}
           >
             <div className="main-title-area">
-              <div class="site-identity">
+              <div className="site-identity">
                 <a href="#">
                   <img
                     src="https://www.tu-chemnitz.de/tucal4/img/logo-ua.svg"

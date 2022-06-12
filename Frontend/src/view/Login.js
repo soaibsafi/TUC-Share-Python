@@ -67,7 +67,7 @@ class LoginPage extends React.Component {
             }}
           >
             <div className="main-title-area">
-              <div class="site-identity">
+              <div className="site-identity">
                 <a href="#">
                   <img
                     src="https://www.tu-chemnitz.de/tucal4/img/logo-ua.svg"

@@ -1,7 +1,14 @@
 import React from "react";
 import "./Download.css";
 import { withStyles } from "@material-ui/core/styles";
-import { getFileInfo, checkFileStatus, downloadFileAsGuest, clearCache, downloadFileAsUser } from "../api/utils";
+import {
+  getFileInfo,
+  checkFileStatus,
+  downloadFileAsGuest,
+  clearCache,
+  downloadFileAsUser,
+  unblockFile, deleteRequest, blockFile
+} from "../api/utils";
 import "./LandingPage.css";
 
 var FileSaver = require('file-saver');
@@ -32,6 +39,32 @@ class LandingPage extends React.Component {
     this.loadFillData = this.loadFillData.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
     this.backToUser = this.backToUser.bind(this);
+    this.changeFileStatus = this.changeFileStatus.bind(this);
+  }
+
+  changeFileStatus(){
+    var filehash = this.state.filehash
+
+    if(this.state.statusButtonName === 'Unblock'){
+      unblockFile(filehash).then(res => {
+        debugger
+        if(res.data.code === 204){
+          deleteRequest(reqID).then(res => {
+            alert("This file has been unblocked successfully")
+            that.close()
+          })
+        }
+      })
+    } else{
+      blockFile(filehash).then(res => {
+        if(res.data.code === 210){ /// TODO : check the response code for hash creation
+          deleteRequest(reqID).then(res => {
+            alert("This file has been blocked successfully")
+            that.close()
+          })
+        }
+      })
+    }
   }
 
   backToUser(){
@@ -159,7 +192,7 @@ class LandingPage extends React.Component {
             Download
           </button>
 
-          <button className="btn block mr-1" onClick={this.uploadFile}>
+          <button className="btn block mr-1" onClick={this.changeFileStatus}>
             {this.state.statusButtonName}
           </button>
         </div>
