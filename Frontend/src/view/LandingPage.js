@@ -1,6 +1,6 @@
 import React from "react";
 import { uploadFile } from "../api/utils";
-import "./LandingPage.css";
+import "./All.css";
 
 import TextField from "@material-ui/core/TextField";
 
@@ -11,6 +11,7 @@ const redirectpupilpath = "/pupilpanel";
 import {withStyles} from "@material-ui/core/styles";
 import IconButton from '@material-ui/core/IconButton';
 import * as micon from '@material-ui/icons';
+import { Hidden } from "@material-ui/core";
 
 const styles = (theme) => ({
   root: {},
@@ -74,13 +75,13 @@ class LandingPage extends React.Component {
     if (this.state.filesList.length) {
       return this.state.filesList.map((data) => {
         return (
-          <tr key={data.hashId}>
-            <th>{data.fileName}</th>
-            <th style={{ display: this.state.hideDownloadUrl ? "none" : "" }}>
+          <tr className="d-flex flex-nowrap" key={data.hashId}>
+            <th className="col-sm" >{data.fileName}</th>
+            <th className="col-sm" style={{overflow: 'hidden', display: this.state.hideDownloadUrl ? "none" : "" }}>
               {data.downloadUrl}
             </th>
             <IconButton
-              className="btn btn-info"
+              className="btn btn-info col-1"
               style={{
                 width: "85%",
                 display: this.state.hideDownloadUrl ? "none" : "",
@@ -217,16 +218,16 @@ class LandingPage extends React.Component {
           </div>
 
         <div className="uploadTable table-wrapper-scroll-y my-custom-scrollbar" style={{display: this.state.filesList.length? '' : 'none'}}>
-          <table className="table table-hover table-striped" >
+          <table className="table table-hover table-striped  table-bordered" >
             <thead style={{ backgroundColor: "#005f50", color: "#dff9fb" }}>
-              <tr key={"user_key1"}>
-                <th scope="col" style={{ width: "20%" }}>
+              <tr className="d-flex flex-nowrap" key={"user_key1"}>
+                <th className="col-sm" scope="col" style={{ width: "20%" }}>
                   File Name
                 </th>
-                <th scope="col" style={{ width: "70%", display: this.state.hideDownloadUrl ? 'none' : '' }}>
+                <th className="col-sm" scope="col" style={{ width: "70%", display: this.state.hideDownloadUrl ? 'none' : '' }}>
                   Download URL
                 </th>
-                <th scope="col" style={{ width: "10%", display: this.state.hideDownloadUrl ? 'none' : ''  }}></th>
+                <th className="col-1" scope="col" style={{ width: "10%", display: this.state.hideDownloadUrl ? 'none' : ''  }}></th>
               </tr>
             </thead>
             <tbody>{this.loadFillData()}</tbody>
