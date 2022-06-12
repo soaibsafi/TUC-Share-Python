@@ -1,10 +1,12 @@
 import React from "react";
 import "./Download.css";
 import { withStyles } from "@material-ui/core/styles";
-import { getFileInfo, checkFileStatus, downloadFileAsGuest, clearCache } from "../api/utils";
+import { getFileInfo, checkFileStatus, downloadFileAsGuest, clearCache, downloadFileAsUser } from "../api/utils";
 import "./LandingPage.css";
 
 var FileSaver = require('file-saver');
+
+const donwloadhost = 'http://127.0.0.1:8000/'
 
 const styles = (theme) => ({
   root: {},
@@ -22,30 +24,51 @@ class LandingPage extends React.Component {
       requestDate:'',
       statusButtonName: '',
       downloadurl: '',
-      isDisabled: false
+      isDisabled: false,
+      userinfo: this.props.location.state.userinfo,
+      userType: this.props.location.state.userType
     };
 
     this.loadFillData = this.loadFillData.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
+    this.backToUser = this.backToUser.bind(this);
+  }
+
+  backToUser(){
+    debugger
+    var that = this
+    this.props.history.push({ pathname: '/user', state:{userType: that.state.userType, userinfo: that.state.userinfo}});
   }
 
   downloadFile(){
     var that = this
     /// TODO: Download as user
 
-    downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
-      if(res.status === 200 && res.statusText === "OK"){
-        let url = "http://127.0.0.1:8000/guestDownload/" + that.state.filehash +"/"+that.state.filename
-        FileSaver.saveAs(url, that.state.filename);
-        clearCache().then(res =>{})
-      }
-    })
+    if(that.state.userinfo){
+      console.log("download as user")
+      downloadFileAsUser(this.state.filehash, that.state.filename).then(res => {
+        if (res.status === 200 && res.statusText === "OK") {
+          let url = donwloadhost + "download/" + that.state.filehash + "/" + that.state.filename
+          FileSaver.saveAs(url, that.state.filename);
+          clearCache().then(res => {})
+        }
+      })
+    } else{
+      downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
+        if (res.status === 200 && res.statusText === "OK") {
+          let url = donwloadhost + "guestDownload/" + that.state.filehash + "/" + that.state.filename
+          FileSaver.saveAs(url, that.state.filename);
+          clearCache().then(res => {})
+        }
+      })
+    }
   }
 
   componentDidMount() {
     var url =  this.props.location.pathname
     var hash = url.split('/')[2]
     var that = this
+
 
     checkFileStatus(hash).then(res => {
       if(res.status === 200 && res.statusText === 'OK'){
@@ -55,7 +78,6 @@ class LandingPage extends React.Component {
           that.setState({statusButtonName: 'Block', downloadurl: url, isDisabled: false})
         }
       }
-
       getFileInfo(hash).then(res => {
         if(res.status === 200 && res.statusText === "OK"){
           var data = res.data
@@ -136,6 +158,9 @@ class LandingPage extends React.Component {
         </div>
 
         <div className="btn-group reqButton" role="group">
+          <button className="btn download mr-1" disabled={this.state.isDisabled} style={{display: this.state.userinfo ? '' : 'none'}} onClick={this.backToUser}>
+            Back
+          </button>
           <button className="btn download mr-1" disabled={this.state.isDisabled} onClick={this.downloadFile}>
             Download
           </button>

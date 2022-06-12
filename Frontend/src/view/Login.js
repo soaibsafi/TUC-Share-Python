@@ -39,8 +39,6 @@ class LoginPage extends React.Component {
       'password': that.state.password
     }
     login(data).then(response => {
-      console.log(response)
-      debugger
       if(response.status === 200 && response.statusText === "OK"){
         if(response.data.user_type === 'Admin')this.props.history.push({ pathname: "/admin", state: {userinfo: response.data} });
         else this.props.history.push({ pathname: "/user", state: {userinfo: response.data} });
