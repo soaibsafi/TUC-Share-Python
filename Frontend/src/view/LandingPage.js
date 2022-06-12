@@ -50,7 +50,7 @@ class LandingPage extends React.Component {
   componentDidMount() {
     if(typeof this.props.location.state === 'undefined'){
 
-    }else{
+    } else{
       this.setState({userType: this.props.location.state.userType})
       debugger
     }

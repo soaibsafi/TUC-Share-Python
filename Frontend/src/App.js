@@ -32,6 +32,7 @@ render(){
           <div className="container py-4">
             <div className="row">
               <Route path="/" exact component={LandingPage}/>
+              <Route path="/upload" exact component={LandingPage}/>
               <Route path="/login" exact component={Login} />
               <Route path="/registration" exact component={Registration}/>
               <Route path='/admin' exact component={Admin}/>

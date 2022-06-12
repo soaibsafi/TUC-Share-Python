@@ -34,11 +34,11 @@ class userpanel extends React.Component {
   }
 
   uploadFile(){
-    this.props.history.push({ pathname: "/", state:{userType: 'User'} });
+    this.props.history.push({ pathname: "/upload", state:{userType: 'User'} });
   }
 
   logoutAction(){
-    this.props.history.push({ pathname: "/" });
+    this.props.history.push({ pathname: "/" , state:{userType: ''}});
   }
 
   loadRequestList(){
@@ -68,10 +68,10 @@ class userpanel extends React.Component {
         var filename = data.file_name + data.file_type;
         return (
             <tr key={data.req_id}>
-              <th>{filename}</th>
-              <td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>
-                <micon.Info style={{color: "#000", frontSize: "100"}}/>
-              </IconButton>}</td>
+              {/*<th>{filename}</th>*/}
+              {/*<td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>*/}
+              {/*  <micon.Info style={{color: "#000", frontSize: "100"}}/>*/}
+              {/*</IconButton>}</td>*/}
             </tr>
         );
       });
@@ -113,7 +113,7 @@ class userpanel extends React.Component {
             </div>
 
             <div className='form-group'>
-              <h4 className='reqTitle'>Pending Requests</h4>
+              <h4 className='reqTitle'>File List</h4>
               {/* <h4 style={{color: '#8e44ad', textAlign: 'center', margin: '0px 0 10px 12.5%'}}>Requests</h4> */}
               <div className="box-container">
                 {/*<div className="ag-theme-alpine data-table">*/}
@@ -122,7 +122,10 @@ class userpanel extends React.Component {
                     <thead style={{ backgroundColor: "#005f50", color: "#dff9fb" }}>
                     <tr key={"user_key1"}>
                       <th scope="col">File Name</th>
-                      <th scope="col">Details</th>
+                      <th scope="col">Size</th>
+                      <th scope="col">Upload Date & Time</th>
+                      <th scope="col">Download URL</th>
+                      <th scope="col">Block Status</th>
                     </tr>
                     </thead>
                     <tbody>
