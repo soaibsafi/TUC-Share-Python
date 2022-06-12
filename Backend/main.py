@@ -85,22 +85,24 @@ async def upload_file(file: UploadFile = File(...), db : Session = Depends(get_d
     try:
         contents = await file.read()
         file_size = len(contents)
+        print(file_size)
         if file_size > 10485760:
-            raise HTTPException(status_code=403, detail="Mam 10 MiB File Allowed")
+            return {"Error": "Max 10 MiB File Allowed"}
         with open("cache/"+file.filename, 'wb') as f:
             f.write(contents)
-
-        file_hash = str(hash.hash_file(filename))
+        print("cache/"+filename)
+        file_hash = hash.hash_file("cache/"+filename)
         print(file_hash)
         url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
         s = tuc_session.get(url)
+        print(s.status_code)
         status = s.status_code
     except Exception:
-        return {"filehash": "58140fb61e19df0f71ad6ac47617f1b931f5c69de4eb561020c9d2cdcfb5527e"} # TODO : remove this hash id
+        return {"Error": "Upload Error"} # TODO : remove this hash id
     finally:
         await file.close()
 
-    with open(filename, 'rb') as file_data:
+    with open("cache/"+filename, 'rb') as file_data:
         bytes_content = file_data.read()
     data = base64.b64encode(bytes_content).decode('utf-8')
 
