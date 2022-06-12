@@ -24,7 +24,7 @@ class userpanel extends React.Component {
       requestDetails: [],
       hidePopup:true,
       popupHeaderText: "Details",
-      userInfo: {}
+      userInfo: this.props.location.state.userinfo
     };
 
     this.loadFillData = this.loadFillData.bind(this);
@@ -41,10 +41,9 @@ class userpanel extends React.Component {
   componentDidMount() {
     var that = this;
     var token = that.state.token;
-
     if(typeof this.props.location.state === 'undefined'){
       that.loadFileList()
-    }else {
+    } else {
       that.setState({userInfo: that.props.location.state.userinfo}, () => {
         that.loadFileList()
       })
@@ -61,10 +60,8 @@ class userpanel extends React.Component {
   }
 
   downloadFile(data){
-    // debugger
-    var downloadURL = redirectpath + data.file_hash
-    // this.props.history.push({ pathname: path });
-    window.open(downloadURL)
+     var downloadURL = "/download/" + data.file_hash
+    this.props.history.push({ pathname: downloadURL , state:{userType: this.state.userInfo.user_type, userinfo: this.state.userInfo}});
   }
 
   removeFile(data){
@@ -78,8 +75,7 @@ class userpanel extends React.Component {
   }
 
   uploadFile(){
-    // debugger
-    this.props.history.push({ pathname: "/upload", state:{userType: this.state.userInfo.user_type } });
+    this.props.history.push({ pathname: "/upload", state:{userType: this.state.userInfo.user_type, userinfo: this.state.userInfo} });
   }
 
   logoutAction(){
@@ -88,7 +84,6 @@ class userpanel extends React.Component {
   }
 
   loadFileList(){
-
     getFileList(this.state.userInfo.user_id).then(res => {
       console.log(res)
       if (res.status === 200 && res.statusText === "OK") {
@@ -139,8 +134,6 @@ class userpanel extends React.Component {
       });
     }
   }
-
-
 
   render() {
     var that = this;

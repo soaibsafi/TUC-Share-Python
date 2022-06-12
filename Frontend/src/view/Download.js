@@ -1,10 +1,12 @@
 import React from "react";
 import "./Download.css";
 import { withStyles } from "@material-ui/core/styles";
-import { getFileInfo, checkFileStatus, downloadFileAsGuest, clearCache } from "../api/utils";
+import { getFileInfo, checkFileStatus, downloadFileAsGuest, clearCache, downloadFileAsUser } from "../api/utils";
 import "./LandingPage.css";
 
 var FileSaver = require('file-saver');
+
+const donwloadhost = 'http://127.0.0.1:8000/'
 
 const styles = (theme) => ({
   root: {},
@@ -13,6 +15,7 @@ const styles = (theme) => ({
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props)
     this.state = {
       filehash:'',
       fileInfo:[],
@@ -22,24 +25,42 @@ class LandingPage extends React.Component {
       requestDate:'',
       statusButtonName: '',
       downloadurl: '',
-      isDisabled: false
+      isDisabled: false,
+      userinfo: (typeof this.props.location.state === 'undefined') ? {} : this.props.location.state.userinfo,
+      userType: (typeof this.props.location.state === 'undefined') ? {} :  this.props.location.state.userType
     };
 
     this.loadFillData = this.loadFillData.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
+    this.backToUser = this.backToUser.bind(this);
+  }
+
+  backToUser(){
+    var that = this
+    this.props.history.push({ pathname: '/user', state:{userType: that.state.userType, userinfo: that.state.userinfo}});
   }
 
   downloadFile(){
     var that = this
-    /// TODO: Download as user
-
-    downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
-      if(res.status === 200 && res.statusText === "OK"){
-        let url = "http://127.0.0.1:8000/guestDownload/" + that.state.filehash +"/"+that.state.filename
-        FileSaver.saveAs(url, that.state.filename);
-        clearCache().then(res =>{})
-      }
-    })
+    if(Object.keys(that.state.userinfo).length !== 0 ){
+      console.log("download as user")
+      downloadFileAsUser(this.state.filehash, that.state.filename).then(res => {
+        if (res.status === 200 && res.statusText === "OK") {
+          let url = donwloadhost + "download/" + that.state.filehash + "/" + that.state.filename
+          FileSaver.saveAs(url, that.state.filename);
+          clearCache().then(res => {})
+        }
+      })
+    } else{
+      console.log("download as guest")
+      downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
+        if (res.status === 200 && res.statusText === "OK") {
+          let url = donwloadhost + "guestDownload/" + that.state.filehash + "/" + that.state.filename
+          FileSaver.saveAs(url, that.state.filename);
+          clearCache().then(res => {})
+        }
+      })
+    }
   }
 
   componentDidMount() {
@@ -47,15 +68,15 @@ class LandingPage extends React.Component {
     var hash = url.split('/')[2]
     var that = this
 
+
     checkFileStatus(hash).then(res => {
       if(res.status === 200 && res.statusText === 'OK'){
-        if(res.data.filestatus === "Blocked"){
+        if(res.data.fstatus === "Block"){
           that.setState({statusButtonName: 'Unblock', downloadurl: url, isDisabled: true})
         }else{
           that.setState({statusButtonName: 'Block', downloadurl: url, isDisabled: false})
         }
       }
-
       getFileInfo(hash).then(res => {
         if(res.status === 200 && res.statusText === "OK"){
           var data = res.data
@@ -129,13 +150,14 @@ class LandingPage extends React.Component {
             >
               Download file
             </h3>
-            {console.log("hi")}
-            {console.log(this.state.fileInfo)}
             {this.loadFillData()}
           </div>
         </div>
 
         <div className="btn-group reqButton" role="group">
+          <button className="btn download mr-1" disabled={this.state.isDisabled} style={{display: Object.keys(this.state.userinfo).length === 0  ? 'none' : ''}} onClick={this.backToUser}>
+            Back
+          </button>
           <button className="btn download mr-1" disabled={this.state.isDisabled} onClick={this.downloadFile}>
             Download
           </button>

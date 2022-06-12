@@ -23,6 +23,16 @@ export async function clearCache(){
   }
 }
 
+export async function downloadFileAsUser(hash, fname){
+  url = host + "download/" + hash +"/"+fname
+  try{
+    const response = await axios.get(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
 export async function downloadFileAsGuest(hash, fname){
   url = host + "guestDownload/" + hash +"/"+fname
   try{

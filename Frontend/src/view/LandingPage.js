@@ -46,14 +46,14 @@ class LandingPage extends React.Component {
   }
 
   backToUser(){
-    this.props.history.push({ pathname: "/user" });
+    this.props.history.push({ pathname: "/user" , state: {userinfo: this.state.userinfo}});
   }
 
   componentDidMount() {
     if(typeof this.props.location.state === 'undefined'){
 
     } else{
-      this.setState({userType: this.props.location.state.userType})
+      this.setState({userType: this.props.location.state.userType, userinfo: this.props.location.state.userinfo})
     }
 
   }
