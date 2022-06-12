@@ -1,0 +1,35 @@
+.download {
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 10px auto;
+  background-color: #005f50;
+  color: white;
+}
+
+.download:hover{
+  background-color: #0e7969;
+}
+
+.block {
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 10px auto;
+  background-color: #d60000;
+  color: white;
+}
+
+.block:hover{
+  background-color: #ed1010;
+}
+
+.container{
+  margin: 10px auto
+}
+
+.downloadDetailsLabel{
+  font-size: 1.3rem;
+  text-align: left;
+  margin-left: 20px;
+}
