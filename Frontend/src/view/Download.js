@@ -15,6 +15,7 @@ const styles = (theme) => ({
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props)
     this.state = {
       filehash:'',
       fileInfo:[],
@@ -25,8 +26,8 @@ class LandingPage extends React.Component {
       statusButtonName: '',
       downloadurl: '',
       isDisabled: false,
-      userinfo: this.props.location.state.userinfo,
-      userType: this.props.location.state.userType
+      userinfo: (typeof this.props.location.state === 'undefined') ? {} : this.props.location.state.userinfo,
+      userType: (typeof this.props.location.state === 'undefined') ? {} :  this.props.location.state.userType
     };
 
     this.loadFillData = this.loadFillData.bind(this);
@@ -35,16 +36,13 @@ class LandingPage extends React.Component {
   }
 
   backToUser(){
-    debugger
     var that = this
     this.props.history.push({ pathname: '/user', state:{userType: that.state.userType, userinfo: that.state.userinfo}});
   }
 
   downloadFile(){
     var that = this
-    /// TODO: Download as user
-
-    if(that.state.userinfo){
+    if(Object.keys(that.state.userinfo).length !== 0 ){
       console.log("download as user")
       downloadFileAsUser(this.state.filehash, that.state.filename).then(res => {
         if (res.status === 200 && res.statusText === "OK") {
@@ -54,6 +52,7 @@ class LandingPage extends React.Component {
         }
       })
     } else{
+      console.log("download as guest")
       downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
         if (res.status === 200 && res.statusText === "OK") {
           let url = donwloadhost + "guestDownload/" + that.state.filehash + "/" + that.state.filename
@@ -151,14 +150,12 @@ class LandingPage extends React.Component {
             >
               Download file
             </h3>
-            {console.log("hi")}
-            {console.log(this.state.fileInfo)}
             {this.loadFillData()}
           </div>
         </div>
 
         <div className="btn-group reqButton" role="group">
-          <button className="btn download mr-1" disabled={this.state.isDisabled} style={{display: this.state.userinfo ? '' : 'none'}} onClick={this.backToUser}>
+          <button className="btn download mr-1" disabled={this.state.isDisabled} style={{display: Object.keys(this.state.userinfo).length === 0  ? 'none' : ''}} onClick={this.backToUser}>
             Back
           </button>
           <button className="btn download mr-1" disabled={this.state.isDisabled} onClick={this.downloadFile}>

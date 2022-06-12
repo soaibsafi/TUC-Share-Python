@@ -41,7 +41,6 @@ class userpanel extends React.Component {
   componentDidMount() {
     var that = this;
     var token = that.state.token;
-     debugger
     if(typeof this.props.location.state === 'undefined'){
       that.loadFileList()
     } else {
@@ -62,7 +61,6 @@ class userpanel extends React.Component {
 
   downloadFile(data){
      var downloadURL = "/download/" + data.file_hash
-    // window.open(downloadURL)
     this.props.history.push({ pathname: downloadURL , state:{userType: this.state.userInfo.user_type, userinfo: this.state.userInfo}});
   }
 
