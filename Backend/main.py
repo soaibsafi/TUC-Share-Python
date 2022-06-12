@@ -177,21 +177,19 @@ def get_file_info(file_hash:str, db: Session = Depends(get_db)):
 def get_files_of_single_user(user_id:int, db: Session = Depends(get_db)):
     return (query.get_all_files_of_a_user(user_id, db), {"status":"SUCESS"})
 
-@app.get("/download/", response_class=FileResponse)
-async def download_as_user(file_url: str, user_type: str, db: Session = Depends(get_db)):
-    if user_type == "User":
-        filepath =  query.write_single_file(file_url, db)
-        return filepath
-    else:
-        file_path = query.write_single_file(file_url, db)
-        return StreamingResponse(helper.get_guest_download_file(file_path))
+@app.get("/download/{file_url}/{file_name}", response_class=FileResponse)
+async def download_as_user(file_url: str, db: Session = Depends(get_db)):
+    filepath =  query.write_single_file(file_url, db)
+    return filepath
+
 
 @app.get("/clearCache")
 def clear_cache():
     helper.clear_cache()
     return {"Cache clear successful"}
 
-@app.get("/guestDownload/", response_class=FileResponse)
-async def download_as_guest(file_url: str, db: Session = Depends(get_db)):
+@app.get("/guestDownload/{file_url}/{file_name}", response_class=FileResponse)
+async def download_as_guest(file_url: str , db: Session = Depends(get_db)):
     file_path = query.write_single_file(file_url, db)
     return StreamingResponse(helper.get_guest_download_file(file_path))
+

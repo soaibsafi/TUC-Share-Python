@@ -4,6 +4,25 @@ const host = "http://127.0.0.1:8000/"
 var url;
 
 
+export async function clearCache(){
+  url = host + "clearCache"
+  try{
+    const response = await axios.get(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
+export async function downloadFileAsGuest(hash, fname){
+  url = host + "guestDownload/" + hash +"/"+fname
+  try{
+    const response = await axios.get(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
 
 export async function getFileInfo(hash){
   url = host + "fileInfo/?file_hash=" + hash;
