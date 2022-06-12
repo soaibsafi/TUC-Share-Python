@@ -1,6 +1,6 @@
 import React from "react";
 import { uploadFile } from "../api/utils";
-import "./LandingPage.css";
+import "./All.css";
 
 import TextField from "@material-ui/core/TextField";
 

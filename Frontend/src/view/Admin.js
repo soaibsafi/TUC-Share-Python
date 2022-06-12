@@ -1,6 +1,6 @@
 import React from "react";
 import { getRequests } from "../api/utils";
-import "./Admin.css";
+import "./All.css";
 
 import { withStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";

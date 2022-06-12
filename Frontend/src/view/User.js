@@ -122,16 +122,16 @@ class userpanel extends React.Component {
 
         var downloadURL = redirectpath + data.file_hash  ///http://localhost:3000/download/50ce455d63fde3c33d727ceab15f3577a62b6e567e26153a9b74064f9a9f8490
         return (
-            <tr key={data.file_hash}>
-              <td>{filename}</td>
-              <td>{size.toFixed(2)} {sizeMatric}</td>
-              <td>{requestDate}</td>
-              <td>{downloadURL}</td>
-              <td>{data.status}</td>
-              <td>{<IconButton className="btn btn-info" onClick={() => this.removeFile(data)}>
+            <tr className="d-flex"  key={data.file_hash}>
+              <td className="col-2">{filename}</td>
+              <td className="col-1">{size.toFixed(2)} {sizeMatric}</td>
+              <td className="col-2">{requestDate}</td>
+              <td className="col-3">{downloadURL}</td>
+              <td className="col-1">{data.status}</td>
+              <td>{<IconButton className="btn btn-info col-sm" onClick={() => this.removeFile(data)}>
                 <micon.RemoveCircle style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
-              <td>{<IconButton className="btn btn-info" onClick={() => this.downloadFile(data)}>
+              <td>{<IconButton className="btn btn-info col-sm" onClick={() => this.downloadFile(data)}>
                 <micon.CloudDownloadRounded style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
             </tr>
@@ -196,17 +196,18 @@ class userpanel extends React.Component {
             <div className="box-container">
               {/*<div className="ag-theme-alpine data-table">*/}
               <div className="table-scroll requestTable">
-                <table className="table table-hover table-striped">
+                <table className="table table-hover table-striped table-bordered">
                   <thead
                     style={{ backgroundColor: "#005f50", color: "#dff9fb" }}
                   >
-                    <tr key={"user_key1"}>
-                      <th scope="col">File Name</th>
-                      <th scope="col">Size</th>
-                      <th scope="col">Upload Date & Time</th>
-                      <th scope="col">Download URL</th>
-                      <th scope="col">Block Status</th>
-                      <th scope="col">Options</th>
+                    <tr className="d-flex" key={"user_key1"}>
+                      <th className="col-2" scope="col">File Name</th>
+                      <th className="col-1" scope="col">Size</th>
+                      <th className="col-2" scope="col">Upload Date & Time</th>
+                      <th className="col-3" scope="col">Download URL</th>
+                      <th className="col-1" scope="col">Status</th>
+                      <th className="col-sm" scope="col"></th>
+                      <th className="col-sm" scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
