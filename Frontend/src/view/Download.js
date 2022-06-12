@@ -1,20 +1,8 @@
 import React from "react";
-import { getFileInfo } from "../api/utils";
 import "./Download.css";
-// import {useLocation} from 'react-router-dom'
-
-import TextField from "@material-ui/core/TextField";
-
-const redirectadminpath = "/adminpanel";
-const redirectteacherpath = "/teacherpanel";
-const redirectpupilpath = "/pupilpanel";
-
 import { withStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import * as micon from "@material-ui/icons";
 import { getFileInfo, checkFileStatus, downloadFileAsGuest, clearCache } from "../api/utils";
 import "./LandingPage.css";
-import {withStyles} from "@material-ui/core/styles";
 
 var FileSaver = require('file-saver');
 
