@@ -36,3 +36,19 @@
     background-color: #d60000;
     color: white;
 }
+
+  
+  .site-identity {
+    float: left;
+  }
+  
+  .site-identity h1 {
+    font-size: 2em;
+    display: inline-block;
+  }
+  
+  .site-identity img {
+    max-width: 80px;
+    float: left;
+    margin: 0 10px 0 0;
+  }
