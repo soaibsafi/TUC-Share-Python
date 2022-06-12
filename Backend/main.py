@@ -76,7 +76,7 @@ def login_validation(user: Dict[str, str], db: Session = Depends(get_db)):
     return db_user
 
 @app.post("/uploadFile")
-async def upload_file(file: UploadFile = File(...), db : Session = Depends(get_db)):
+async def upload_file(user_id: int, file: UploadFile = File(...),  db : Session = Depends(get_db)):
     print(file)
     filename = file.filename
     root_name, file_type = os.path.splitext(filename)
@@ -116,7 +116,9 @@ async def upload_file(file: UploadFile = File(...), db : Session = Depends(get_d
         upload_date_time,
         file_hash,
         user_ip,
-        status )
+        status,
+        user_id
+        )
 
 @app.get("/fileType/{file_id}")
 def get_file_type(file_id:int, db: Session = Depends(get_db)):

@@ -35,12 +35,13 @@ def upload_file(db: Session, file, file_name, file_size, file_type, upload_date_
             file_hash=file_hash,
             user_ip=user_ip,
             status=status,
-            user_id=user_id
+            user_id = user_id
             )
     db.add(db_file)
     db.commit()
     db.refresh(db_file)
     return db_file
+
 
 def get_file_info(db: Session, file_hash: str):
     return db.query(
