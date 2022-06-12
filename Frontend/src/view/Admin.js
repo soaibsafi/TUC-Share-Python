@@ -29,6 +29,11 @@ class adminPanel extends React.Component {
     this.openPopup = this.openPopup.bind(this);
     this.switchPopup = this.switchPopup.bind(this);
     this.reloadRequestList = this.reloadRequestList.bind(this);
+    this.logoutAction = this.logoutAction.bind(this);
+  }
+
+  logoutAction(){
+    this.props.history.push({ pathname: "/" });
   }
 
   reloadRequestList(){
@@ -54,9 +59,11 @@ class adminPanel extends React.Component {
   loadFillData() {
     if (this.state.requestList.length) {
       return this.state.requestList.map((data) => {
+        // console.log(data)
+        var filename = data.file_name + data.file_type;
           return (
               <tr key={data.req_id}>
-                <th>{data.file_name}</th>
+                <th>{filename}</th>
                 <td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>
                   <micon.Info style={{color: "#000", frontSize: "100"}}/>
                 </IconButton>}</td>
