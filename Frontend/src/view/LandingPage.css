@@ -30,10 +30,11 @@
 
 
 .uploadTable {
-    width: 50vw;
+    width: 55vw;
     margin: auto;
     padding-bottom: 10px;
     border: #000 1px solid;
+    text-align: left;
 }
 
 .table-wrapper {
