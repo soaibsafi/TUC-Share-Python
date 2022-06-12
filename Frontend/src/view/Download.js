@@ -15,7 +15,6 @@ const styles = (theme) => ({
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props)
     this.state = {
       filehash:'',
       fileInfo:[],
@@ -43,7 +42,6 @@ class LandingPage extends React.Component {
   downloadFile(){
     var that = this
     if(Object.keys(that.state.userinfo).length !== 0 ){
-      console.log("download as user")
       downloadFileAsUser(this.state.filehash, that.state.filename).then(res => {
         if (res.status === 200 && res.statusText === "OK") {
           let url = donwloadhost + "download/" + that.state.filehash + "/" + that.state.filename
@@ -52,7 +50,6 @@ class LandingPage extends React.Component {
         }
       })
     } else{
-      console.log("download as guest")
       downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
         if (res.status === 200 && res.statusText === "OK") {
           let url = donwloadhost + "guestDownload/" + that.state.filehash + "/" + that.state.filename
@@ -121,7 +118,6 @@ class LandingPage extends React.Component {
 
 
   copyUrl(data) {
-    console.log(data);
   }
 
   render() {

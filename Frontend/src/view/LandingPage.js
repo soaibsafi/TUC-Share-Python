@@ -112,7 +112,7 @@ class LandingPage extends React.Component {
       console.log(response);
       var tempList = that.state.filesList;
       var downloadUrl =
-        "http://localhost:3000/download/" + response.data.filehash;
+        "http://localhost:3000/download/" + response.data.file_hash;
       var fileName = that.state.selectedFile.name;
       var hashId = response.data.fileHash;
 
