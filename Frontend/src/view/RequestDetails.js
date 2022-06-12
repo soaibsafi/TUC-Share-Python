@@ -61,18 +61,12 @@ class RequestDetails extends React.Component {
     var that = this
     that.props.closePopup();
     that.props.reloadList();
-    // getRequests().then(res => {
-    //   console.log(res)
-    //   if (res.status === 200 && res.statusText === "OK") {
-    //     this.setState({requestList: res.data}, () => {that.props.closePopup();})
-    //   }
-    // });
-
   }
 
   loadFillData() {
     if (this.state.requestDetails.length) {
       return this.state.requestDetails.map(data => {
+        var filename = data.file_name+data.file_type
         var filesize = data.file_size / 1024
         var size = filesize > 1023 ? filesize/1024 : filesize
         var sizeMatric = filesize > 1023 ? 'MB' : 'KB'
@@ -80,7 +74,7 @@ class RequestDetails extends React.Component {
         var requestDate = reqDT.toLocaleString()
         return (
             <div key={data.file_hash} className='reqDetailsLabel'>
-              <label>File Name: {data.file_name}</label>
+              <label>File Name: {filename}</label>
               <br/>
               <label>Size: {size.toFixed(2)} {sizeMatric} </label>
               <br/>

@@ -55,6 +55,7 @@ class LandingPage extends React.Component {
           that.setState({statusButtonName: 'Block', downloadurl: url, isDisabled: false})
         }
       }
+
       getFileInfo(hash).then(res => {
         if(res.status === 200 && res.statusText === "OK"){
           var data = res.data
@@ -82,12 +83,6 @@ class LandingPage extends React.Component {
   }
 
   loadFillData() {
-    // var filename = data.file_name + data.file_type
-    // var filesize = data.file_size / 1024
-    // var size = filesize > 1023 ? filesize/1024 : filesize
-    // var sizeMatric = filesize > 1023 ? 'MB' : 'KB'
-    // var reqDT = new Date(data.upload_date_time)
-    // var requestDate = reqDT.toLocaleString()
     return (
       <div key={this.state.filehash} className="downloadDetailsLabel">
         <label>File Name: {this.state.filename}</label>
