@@ -1,102 +1,135 @@
-import React from "react";
-import { getRequests } from "../api/utils";
-import "./Admin.css";
+import React from 'react'
+import {getFileList } from "../api/utils";
+import './Admin.css'
 
-import { withStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import * as micon from "@material-ui/icons";
+import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import * as micon from '@material-ui/icons';
 import RequestDetailsPopup from "./RequestDetails";
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {},
 });
 
-const redirectpath = "/login";
+const redirectpath = 'http://localhost:3000/download/';
 
 class userpanel extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      fileList:[],
+
       requestList: [],
       requestDetails: [],
-      hidePopup: true,
+      hidePopup:true,
       popupHeaderText: "Details",
+      userInfo: {}
     };
 
     this.loadFillData = this.loadFillData.bind(this);
+    this.removeFile = this.removeFile.bind(this);
+
     this.openPopup = this.openPopup.bind(this);
     this.switchPopup = this.switchPopup.bind(this);
-    this.loadRequestList = this.loadRequestList.bind(this);
+    this.loadFileList = this.loadFileList.bind(this);
     this.logoutAction = this.logoutAction.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
-  }
-
-  uploadFile() {
-    this.props.history.push({
-      pathname: "/upload",
-      state: { userType: "User" },
-    });
-  }
-
-  logoutAction() {
-    this.props.history.push({ pathname: "/", state: { userType: "" } });
-  }
-
-  loadRequestList() {
-    getRequests().then((res) => {
-      console.log(res);
-      if (res.status === 200 && res.statusText === "OK") {
-        this.setState({ requestList: res.data });
-      }
-    });
-  }
-
-  switchPopup() {
-    this.setState({ hidePopup: !this.state.hidePopup });
-  }
-
-  openPopup(data) {
-    var that = this;
-    var list = [data];
-    this.setState({ requestDetails: [data] }, () => {
-      that.switchPopup();
-    });
-  }
-
-  loadFillData() {
-    if (this.state.requestList.length) {
-      return this.state.requestList.map((data) => {
-        // console.log(data)
-        var filename = data.file_name + data.file_type;
-        return (
-          <tr key={data.req_id}>
-            {/*<th>{filename}</th>*/}
-            {/*<td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>*/}
-            {/*  <micon.Info style={{color: "#000", frontSize: "100"}}/>*/}
-            {/*</IconButton>}</td>*/}
-          </tr>
-        );
-      });
-    }
   }
 
   componentDidMount() {
     var that = this;
     var token = that.state.token;
+    if(typeof this.props.location.state === 'undefined'){
 
+    }else {
+      that.setState({userInfo: that.props.location.state.userinfo}, () => {
+        that.loadFileList()
+      })
+    }
+
+    /// TODO : need to check this snipet
+    /*
     if (token) {
       window.onpopstate = function (event) {
         that.props.history.go(1);
       };
-    }
-    that.loadRequestList();
+    }*/
+
   }
+
+  removeFile(data){
+
+  }
+
+  uploadFile(){
+    debugger
+    this.props.history.push({ pathname: "/upload", state:{userType: this.state.userInfo.user_type} });
+  }
+
+  logoutAction(){
+    this.props.history.push({ pathname: "/" , state:{userType:  this.state.userInfo.user_type}});
+  }
+
+  loadFileList(){
+
+    getFileList(this.state.userInfo.user_id).then(res => {
+      console.log(res)
+      if (res.status === 200 && res.statusText === "OK") {
+        this.setState({fileList: res.data[0]})
+      }
+    });
+  }
+
+  switchPopup(){
+    this.setState({hidePopup: !this.state.hidePopup});
+  }
+
+  openPopup(data) {
+
+    var that = this;
+    var list = [data];
+    this.setState({requestDetails: [data]}, () =>{that.switchPopup()})
+  }
+
+  loadFillData() {
+    // debugger
+    if (this.state.fileList.length) {
+      return this.state.fileList.map((data) => {
+        // console.log(data)
+        var filename = data.file_name+data.file_type
+        var filesize = data.file_size / 1024
+        var size = filesize > 1023 ? filesize/1024 : filesize
+        var sizeMatric = filesize > 1023 ? 'MB' : 'KB'
+        var reqDT = new Date(data.upload_date_time)
+        var requestDate = reqDT.toLocaleString()
+
+        var downloadURL = redirectpath + data.file_hash  ///http://localhost:3000/download/50ce455d63fde3c33d727ceab15f3577a62b6e567e26153a9b74064f9a9f8490
+        return (
+            <tr key={data.file_hash}>
+              <td>{filename}</td>
+              <td>{size.toFixed(2)} {sizeMatric}</td>
+              <td>{requestDate}</td>
+              <td>{downloadURL}</td>
+              <td>{data.status}</td>
+              <td>{<IconButton className="btn btn-info" onClick={() => this.removeFile(data)}>
+                <micon.RemoveCircle style={{color: "#000", frontSize: "100"}}/>
+              </IconButton>}</td>
+              <td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>
+                <micon.CloudDownloadRounded style={{color: "#000", frontSize: "100"}}/>
+              </IconButton>}</td>
+            </tr>
+        );
+      });
+    }
+  }
+
+
 
   render() {
     var that = this;
     var state = this.state;
-    const { classes } = this.props;
+    const {classes} = this.props;
     return (
       <div>
         <div className="fill-window">
@@ -157,34 +190,37 @@ class userpanel extends React.Component {
                       <th scope="col">Upload Date & Time</th>
                       <th scope="col">Download URL</th>
                       <th scope="col">Block Status</th>
+                      <th scope="col">Options</th>
                     </tr>
-                  </thead>
-                  <tbody>{this.loadFillData()}</tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                    {this.loadFillData()}
+                    </tbody>
+                  </table>
+                </div>
+                {/*</div>*/}
               </div>
-              {/*</div>*/}
             </div>
+            {!that.state.hidePopup ? (
+                <RequestDetailsPopup
+                    requestDetails={that.state.requestDetails}
+                    popupHeaderText={that.state.popupHeaderText}
+                    reloadList={this.loadFileList}
+                    closePopup={that.switchPopup}
+                />
+            ) : null}
+            <div
+                style={{
+                  width: "100%",
+                  backgroundColor: "#005f50",
+                  height: "60px",
+                  position: "fixed",
+                  bottom: "0",
+                }}
+            ></div>
           </div>
-          {!that.state.hidePopup ? (
-            <RequestDetailsPopup
-              requestDetails={that.state.requestDetails}
-              popupHeaderText={that.state.popupHeaderText}
-              reloadList={this.loadRequestList}
-              closePopup={that.switchPopup}
-            />
-          ) : null}
-          <div
-            style={{
-              width: "100%",
-              backgroundColor: "#005f50",
-              height: "60px",
-              position: "fixed",
-              bottom: "0",
-            }}
-          ></div>
         </div>
-      </div>
-    );
+    )
   }
 
   // logoutAction() {
@@ -200,4 +236,4 @@ class userpanel extends React.Component {
   // }
 }
 
-export default withStyles(styles, { withTheme: true })(userpanel);
+export default withStyles(styles, {withTheme: true})(userpanel);

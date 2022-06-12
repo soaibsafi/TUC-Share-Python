@@ -73,7 +73,7 @@ def login_validation(user: Dict[str, str], db: Session = Depends(get_db)):
     password_ckeck = db_user.password == hashed_pass
     if password_ckeck is False:
         raise HTTPException(status_code=404, detail="Password doesn't match")
-    return db_user.user_type
+    return db_user
 
 @app.post("/uploadFile")
 async def upload_file(file: UploadFile = File(...), db : Session = Depends(get_db)):

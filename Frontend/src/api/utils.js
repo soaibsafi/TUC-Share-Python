@@ -3,6 +3,15 @@ import axios from "axios"
 const host = "http://127.0.0.1:8000/"
 var url;
 
+export async function deleteFile(fileid){
+  url = host + "file/" + fileid;
+  try{
+    const response = await axios.delete(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
 
 export async function clearCache(){
   url = host + "clearCache"
@@ -66,6 +75,17 @@ export async function blockFile(hashid){
 
 export async function checkFileStatus(hashid){
   url = host + "checkStatus?file_hash=" + hashid;
+  try{
+    const response = await axios.get(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
+export async function getFileList(userid){
+  url = host + "files/" + userid;
+
   try{
     const response = await axios.get(url);
     return response

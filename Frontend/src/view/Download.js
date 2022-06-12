@@ -99,7 +99,6 @@ class LandingPage extends React.Component {
 
 
   copyUrl(data) {
-    debugger;
     console.log(data);
   }
 

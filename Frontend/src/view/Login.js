@@ -1,25 +1,26 @@
-import React from "react";
-import { login } from "../api/utils";
-import "./Login.css";
+import React from 'react'
+import {login} from "../api/utils";
+import './Login.css';
 import "./Admin.css";
 
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import {withStyles} from "@material-ui/core/styles";
+import TextField from '@material-ui/core/TextField';
 
-const redirectadminpath = "/adminpanel";
-const redirectteacherpath = "/teacherpanel";
-const redirectpupilpath = "/pupilpanel";
+const redirectadminpath = '/adminpanel';
+const redirectteacherpath = '/teacherpanel';
+const redirectpupilpath = '/pupilpanel';
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {},
 });
 
 class LoginPage extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
+      username: '',
+      password: ''
     };
 
     this.loginAction = this.loginAction.bind(this);
@@ -27,38 +28,31 @@ class LoginPage extends React.Component {
     this.createUser = this.createUser.bind(this);
   }
 
-  createUser() {
+  createUser(){
     this.props.history.push({ pathname: "/registration" });
   }
 
   loginAction() {
     var that = this;
     var data = {
-      username: that.state.username,
-      password: that.state.password,
-    };
-    login(data).then((response) => {
-      console.log(response);
-      if (response.status === 200 && response.statusText === "OK") {
-        if (response.data === "Admin")
-          this.props.history.push({
-            pathname: "/admin",
-            state: { usertype: response.data },
-          });
-        else
-          this.props.history.push({
-            pathname: "/user",
-            state: { usertype: response.data },
-          });
+      'username': that.state.username,
+      'password': that.state.password
+    }
+    login(data).then(response => {
+      // console.log(response)
+      if(response.status === 200 && response.statusText === "OK"){
+        if(response.data === 'Admin')this.props.history.push({ pathname: "/admin", state: {userinfo: response.data} });
+        else this.props.history.push({ pathname: "/user", state: {userinfo: response.data} });
       }
-    });
+    })
+
   }
 
   onChangeHandler(e, lblname) {
-    if (lblname === "username") {
-      this.setState({ username: e.target.value });
+    if (lblname === 'username') {
+      this.setState({username: e.target.value})
     } else {
-      this.setState({ password: e.target.value });
+      this.setState({password: e.target.value})
     }
   }
 
@@ -150,4 +144,5 @@ class LoginPage extends React.Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(LoginPage);
+
+export default withStyles(styles, {withTheme: true})(LoginPage);

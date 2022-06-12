@@ -8,9 +8,9 @@ const redirectadminpath = "/adminpanel";
 const redirectteacherpath = "/teacherpanel";
 const redirectpupilpath = "/pupilpanel";
 
-import { withStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import * as micon from "@material-ui/icons";
+import {withStyles} from "@material-ui/core/styles";
+import IconButton from '@material-ui/core/IconButton';
+import * as micon from '@material-ui/icons';
 
 const styles = (theme) => ({
   root: {},
@@ -26,7 +26,8 @@ class LandingPage extends React.Component {
       filesList: [],
       uploadFile: "",
       hideDownloadUrl: true,
-      userType: "",
+      userType: '',
+      userinfo: {}
     };
 
     this.selectFile = this.selectFile.bind(this);
@@ -43,16 +44,18 @@ class LandingPage extends React.Component {
     // this.createUser = this.createUser.bind(this);
   }
 
-  backToUser() {
+  backToUser(){
     this.props.history.push({ pathname: "/user" });
   }
 
   componentDidMount() {
-    if (typeof this.props.location.state === "undefined") {
-    } else {
-      this.setState({ userType: this.props.location.state.userType });
-      debugger;
+    if(typeof this.props.location.state === 'undefined'){
+
+    } else{
+      this.setState({userType: this.props.location.state.userType})
+
     }
+
   }
 
   loadRegister() {
@@ -109,7 +112,8 @@ class LandingPage extends React.Component {
     uploadFile(fileData).then((response) => {
       console.log(response);
       var tempList = that.state.filesList;
-      var downloadUrl = "http://localhost:3000/" + response.data.filehash;
+      var downloadUrl =
+        "http://localhost:3000/" + response.data.filehash;
       var fileName = that.state.selectedFile.name;
       var hashId = response.data.fileHash;
 
@@ -214,33 +218,29 @@ class LandingPage extends React.Component {
             </div>
           </div>
 
-          <div className="uploadTable table-wrapper-scroll-y my-custom-scrollbar">
-            <table className="table table-hover table-striped">
-              <thead style={{ backgroundColor: "#005f50", color: "#dff9fb" }}>
-                <tr key={"user_key1"}>
-                  <th scope="col" style={{ width: "20%" }}>
-                    File Name
-                  </th>
-                  <th scope="col" style={{ width: "70%" }}>
-                    Download URL
-                  </th>
-                  <th scope="col" style={{ width: "10%" }}></th>
-                </tr>
-              </thead>
-              <tbody>{this.loadFillData()}</tbody>
-            </table>
-          </div>
-          <button
-            className="btn btn-info upload"
-            onClick={this.backToUser}
-            style={{ display: this.state.userType ? "" : "none" }}
-          >
-            Back
-          </button>
+        <div className="uploadTable table-wrapper-scroll-y my-custom-scrollbar" style={{display: this.state.filesList.length? '' : 'none'}}>
+          <table className="table table-hover table-striped" >
+            <thead style={{ backgroundColor: "#005f50", color: "#dff9fb" }}>
+              <tr key={"user_key1"}>
+                <th scope="col" style={{ width: "20%" }}>
+                  File Name
+                </th>
+                <th scope="col" style={{ width: "70%", display: this.state.hideDownloadUrl ? 'none' : '' }}>
+                  Download URL
+                </th>
+                <th scope="col" style={{ width: "10%", display: this.state.hideDownloadUrl ? 'none' : ''  }}></th>
+              </tr>
+            </thead>
+            <tbody>{this.loadFillData()}</tbody>
+          </table>
+        </div>
+        <button className="btn btn-info upload" onClick={this.backToUser} style={{display: this.state.userType ? '' : 'none'}}>
+          Back
+        </button>
 
-          <button className="btn btn-info upload" onClick={this.uploadFile}>
-            Upload
-          </button>
+        <button className="btn btn-info upload" onClick={this.uploadFile}>
+          Upload
+        </button>
 
           <div
             className="signupSigninLink"
