@@ -1,5 +1,5 @@
 import React from 'react'
-import {getFileList } from "../api/utils";
+import {getFileList, deleteFile} from "../api/utils";
 import './Admin.css'
 
 import { withStyles } from '@material-ui/core/styles';
@@ -59,7 +59,13 @@ class userpanel extends React.Component {
   }
 
   removeFile(data){
-
+    if(confirm("Are you sure you want to delete?")){
+      deleteFile(data.file_id).then(res => {
+        if(res.status === 200 && res.statusText === "OK"){
+          alert("Your file has been removed successfully")
+        }
+      })
+    }
   }
 
   uploadFile(){
