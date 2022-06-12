@@ -54,7 +54,6 @@ class LandingPage extends React.Component {
 
     } else{
       this.setState({userType: this.props.location.state.userType})
-
     }
 
   }
@@ -243,6 +242,7 @@ class LandingPage extends React.Component {
           Upload
         </button>
 
+          {console.log()}
           <div
             className="signupSigninLink"
             style={{ display: this.state.userType ? "none" : "" }}

@@ -1,5 +1,5 @@
 import React from 'react'
-import {getFileList } from "../api/utils";
+import {getFileList, deleteFile} from "../api/utils";
 import './Admin.css'
 
 import { withStyles } from '@material-ui/core/styles';
@@ -29,6 +29,7 @@ class userpanel extends React.Component {
 
     this.loadFillData = this.loadFillData.bind(this);
     this.removeFile = this.removeFile.bind(this);
+    this.downloadFile = this.downloadFile.bind(this);
 
     this.openPopup = this.openPopup.bind(this);
     this.switchPopup = this.switchPopup.bind(this);
@@ -40,8 +41,9 @@ class userpanel extends React.Component {
   componentDidMount() {
     var that = this;
     var token = that.state.token;
-    if(typeof this.props.location.state === 'undefined'){
 
+    if(typeof this.props.location.state === 'undefined'){
+      that.loadFileList()
     }else {
       that.setState({userInfo: that.props.location.state.userinfo}, () => {
         that.loadFileList()
@@ -58,17 +60,31 @@ class userpanel extends React.Component {
 
   }
 
-  removeFile(data){
+  downloadFile(data){
+    // debugger
+    var downloadURL = redirectpath + data.file_hash
+    // this.props.history.push({ pathname: path });
+    window.open(downloadURL)
+  }
 
+  removeFile(data){
+    if(confirm("Are you sure you want to delete?")){
+      deleteFile(data.file_id).then(res => {
+        if(res.status === 200 && res.statusText === "OK"){
+          alert("Your file has been removed successfully")
+        }
+      })
+    }
   }
 
   uploadFile(){
-    debugger
-    this.props.history.push({ pathname: "/upload", state:{userType: this.state.userInfo.user_type} });
+    // debugger
+    this.props.history.push({ pathname: "/upload", state:{userType: this.state.userInfo.user_type } });
   }
 
   logoutAction(){
-    this.props.history.push({ pathname: "/" , state:{userType:  this.state.userInfo.user_type}});
+    debugger
+    this.props.history.push({ pathname: "/" , state:{userType: ""}});
   }
 
   loadFileList(){
@@ -115,7 +131,7 @@ class userpanel extends React.Component {
               <td>{<IconButton className="btn btn-info" onClick={() => this.removeFile(data)}>
                 <micon.RemoveCircle style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
-              <td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>
+              <td>{<IconButton className="btn btn-info" onClick={() => this.downloadFile(data)}>
                 <micon.CloudDownloadRounded style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
             </tr>
