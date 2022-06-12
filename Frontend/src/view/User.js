@@ -29,6 +29,7 @@ class userpanel extends React.Component {
 
     this.loadFillData = this.loadFillData.bind(this);
     this.removeFile = this.removeFile.bind(this);
+    this.downloadFile = this.downloadFile.bind(this);
 
     this.openPopup = this.openPopup.bind(this);
     this.switchPopup = this.switchPopup.bind(this);
@@ -56,6 +57,13 @@ class userpanel extends React.Component {
       };
     }*/
 
+  }
+
+  downloadFile(data){
+    // debugger
+    var downloadURL = redirectpath + data.file_hash
+    // this.props.history.push({ pathname: path });
+    window.open(downloadURL)
   }
 
   removeFile(data){
@@ -121,7 +129,7 @@ class userpanel extends React.Component {
               <td>{<IconButton className="btn btn-info" onClick={() => this.removeFile(data)}>
                 <micon.RemoveCircle style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
-              <td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>
+              <td>{<IconButton className="btn btn-info" onClick={() => this.downloadFile(data)}>
                 <micon.CloudDownloadRounded style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
             </tr>
