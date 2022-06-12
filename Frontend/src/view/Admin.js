@@ -33,7 +33,7 @@ class adminPanel extends React.Component {
   }
 
   logoutAction(){
-    this.props.history.push({ pathname: "/" });
+    this.props.history.push({ pathname: "/" , state:{userType: ''}});
   }
 
   loadRequestList(){
