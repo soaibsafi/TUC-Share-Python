@@ -49,7 +49,7 @@ class LandingPage extends React.Component {
 
     checkFileStatus(hash).then(res => {
       if(res.status === 200 && res.statusText === 'OK'){
-        if(res.data.filestatus === "Blocked"){
+        if(res.data.fstatus === "Block"){
           that.setState({statusButtonName: 'Unblock', downloadurl: url, isDisabled: true})
         }else{
           that.setState({statusButtonName: 'Block', downloadurl: url, isDisabled: false})

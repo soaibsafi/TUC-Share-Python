@@ -64,7 +64,9 @@ class userpanel extends React.Component {
     // debugger
     var downloadURL = redirectpath + data.file_hash
     // this.props.history.push({ pathname: path });
+
     window.open(downloadURL)
+
   }
 
   removeFile(data){
