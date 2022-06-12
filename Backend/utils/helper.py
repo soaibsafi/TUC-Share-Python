@@ -35,3 +35,15 @@ def clear_cache():
     print(filelist)
     for f in filelist:
         os.remove(f)
+
+def file_status(code):
+    if code == 200:
+        return "Unblocked"
+    elif code == 210:
+        return "Block"
+    elif code == 204:
+        return "Removed"
+    elif code == 201:
+        return "Created"
+    else:
+        return "Null"
