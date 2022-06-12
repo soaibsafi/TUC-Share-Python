@@ -78,6 +78,7 @@ class LandingPage extends React.Component {
         }
       }
       getFileInfo(hash).then(res => {
+        ///TODO : error throwing
         if(res.status === 200 && res.statusText === "OK"){
           var data = res.data
 
