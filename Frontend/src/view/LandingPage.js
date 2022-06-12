@@ -26,6 +26,7 @@ class LandingPage extends React.Component {
       filesList: [],
       uploadFile: "",
       hideDownloadUrl: true,
+      userType: ''
     };
 
     this.selectFile = this.selectFile.bind(this);
@@ -35,10 +36,25 @@ class LandingPage extends React.Component {
     this.loadRegister = this.loadRegister.bind(this);
     this.loadLogin = this.loadLogin.bind(this);
     this.copyUrl = this.copyUrl.bind(this);
+    this.backToUser = this.backToUser.bind(this);
 
     // this.loginAction = this.loginAction.bind(this);
     // this.onChangeHandler = this.onChangeHandler.bind(this);
     // this.createUser = this.createUser.bind(this);
+  }
+
+  backToUser(){
+    this.props.history.push({ pathname: "/user" });
+  }
+
+  componentDidMount() {
+    if(typeof this.props.location.state === 'undefined'){
+
+    }else{
+      this.setState({userType: this.props.location.state.userType})
+      debugger
+    }
+
   }
 
   loadRegister() {
@@ -195,11 +211,16 @@ class LandingPage extends React.Component {
             <tbody>{this.loadFillData()}</tbody>
           </table>
         </div>
+        <button className="btn btn-info upload" onClick={this.backToUser} style={{display: this.state.userType ? '' : 'none'}}>
+          Back
+        </button>
+
         <button className="btn btn-info upload" onClick={this.uploadFile}>
           Upload
         </button>
 
-        <div className="signupSigninLink">
+
+        <div className="signupSigninLink" style={{display: this.state.userType ? 'none' : ''}}>
           <div className="login">
             <a style={{ width: "30%" }} onClick={this.loadLogin}>
               Login?

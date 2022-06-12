@@ -2,12 +2,11 @@ import React from 'react';
 import '../App.css';
 import './Admin.css'
 
-import {checkFileStatus, blockFile, deleteRequest} from "../api/utils";
+import {checkFileStatus, blockFile, deleteRequest, unblockFile} from "../api/utils";
 
 const styles = theme => ({
   root: {},
   formControl: {
-    // margin: theme.spacing(1),
     minWidth: '100%',
   },
 });
@@ -17,8 +16,7 @@ class RequestDetails extends React.Component {
     super(props);
 
     this.state = {
-      requestDetails: this.props.requestDetails,
-     // popupHeaderText: this.props.popupHeaderText
+      requestDetails: this.props.requestDetails
     }
     this.loadFillData = this.loadFillData.bind(this);
     this.close = this.close.bind(this);
@@ -35,9 +33,18 @@ class RequestDetails extends React.Component {
       if(res.status === 200 && res.statusText === 'OK'){
         if(res.data.filestatus === "Blocked"){
           blockFile(hashid).then(res => {
-            if(res.data.code === 210){
+            if(res.data.code === 210){ /// TODO : check the response code for hash creation
               deleteRequest(reqID).then(res => {
                 alert("This file has been blocked successfully")
+                that.close()
+              })
+            }
+          })
+        } else{
+          unblockFile(hashid).then(res => {
+            if(res.data.code === 204){
+              deleteRequest(reqID).then(res => {
+                alert("This file has been unblocked successfully")
                 that.close()
               })
             }

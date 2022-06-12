@@ -9,6 +9,7 @@ import Registration from './view/Registration'
 import LandingPage from './view/LandingPage'
 import Admin from "./view/Admin";
 import Download from "./view/Download"
+import User from "./view/User"
 
 import adminPanel from './view/admin/adminPanel'
 import pupilPanel from "./view/pupil/pupilPanel";
@@ -35,6 +36,7 @@ render(){
               <Route path="/registration" exact component={Registration}/>
               <Route path='/admin' exact component={Admin}/>
               <Route path={downloadPath}  component={Download}/>
+              <Route path='/user' exact component={User}/>
 
 
 

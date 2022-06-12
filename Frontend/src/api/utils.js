@@ -44,6 +44,16 @@ export async function deleteRequest(reqID){
   }
 }
 
+export async function unblockFile(hashid){
+  url = host + "unblock?file_hash=" + hashid;
+  try{
+    const response = await axios.delete(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
 export async function blockFile(hashid){
   url = host + "block?file_hash=" + hashid;
   try{

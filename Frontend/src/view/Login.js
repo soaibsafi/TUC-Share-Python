@@ -40,7 +40,8 @@ class LoginPage extends React.Component {
     login(data).then(response => {
       console.log(response)
       if(response.status === 200 && response.statusText === "OK"){
-        this.props.history.push({ pathname: "/admin", state: {usertype: response.data} });
+        if(response.data === 'Admin')this.props.history.push({ pathname: "/admin", state: {usertype: response.data} });
+        else this.props.history.push({ pathname: "/user", state: {usertype: response.data} });
       }
     })
 
@@ -77,7 +78,7 @@ class LoginPage extends React.Component {
                          onChange={(e) => this.onChangeHandler(e, "password")}/>
               <br/><br/>
               <button className="btn btn-info signupLoginButton" style={{width: '85%'}} onClick={this.loginAction}>Login</button>
-              <button className="btn btn-info signupLoginButton" style={{width: '85%'}} onClick={this.createUser}>Create a new user</button>
+              {/*<button className="btn btn-info signupLoginButton" style={{width: '85%'}} onClick={this.createUser}>Create a new user</button>*/}
             </div>
           </div>
           <div>

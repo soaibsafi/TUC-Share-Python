@@ -13,7 +13,7 @@ const styles = theme => ({
 
 const redirectpath = '/login';
 
-class adminPanel extends React.Component {
+class userpanel extends React.Component {
 
   constructor(props) {
     super(props);
@@ -30,6 +30,11 @@ class adminPanel extends React.Component {
     this.switchPopup = this.switchPopup.bind(this);
     this.loadRequestList = this.loadRequestList.bind(this);
     this.logoutAction = this.logoutAction.bind(this);
+    this.uploadFile = this.uploadFile.bind(this);
+  }
+
+  uploadFile(){
+    this.props.history.push({ pathname: "/", state:{userType: 'User'} });
   }
 
   logoutAction(){
@@ -46,7 +51,7 @@ class adminPanel extends React.Component {
   }
 
   switchPopup(){
-      this.setState({hidePopup: !this.state.hidePopup});
+    this.setState({hidePopup: !this.state.hidePopup});
   }
 
   openPopup(data) {
@@ -61,14 +66,14 @@ class adminPanel extends React.Component {
       return this.state.requestList.map((data) => {
         // console.log(data)
         var filename = data.file_name + data.file_type;
-          return (
-              <tr key={data.req_id}>
-                <th>{filename}</th>
-                <td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>
-                  <micon.Info style={{color: "#000", frontSize: "100"}}/>
-                </IconButton>}</td>
-              </tr>
-          );
+        return (
+            <tr key={data.req_id}>
+              <th>{filename}</th>
+              <td>{<IconButton className="btn btn-info" onClick={() => this.openPopup(data)}>
+                <micon.Info style={{color: "#000", frontSize: "100"}}/>
+              </IconButton>}</td>
+            </tr>
+        );
       });
     }
   }
@@ -76,6 +81,7 @@ class adminPanel extends React.Component {
   componentDidMount() {
     var that = this;
     var token = that.state.token;
+
     if (token) {
       window.onpopstate = function (event) {
         that.props.history.go(1);
@@ -95,8 +101,11 @@ class adminPanel extends React.Component {
               <div className='main-title-area'>
                 <h4 style={{color: '#ecf0f1'}}>TUC Share {that.state.fullName}</h4>
                 {/* <h4 style={{color: '#ecf0f1'}}>Currently in: {that.state.className}</h4> */}
-                <h4 style={{color: '#ecf0f1'}}>Admin Portal</h4>
-                {/*<button type="button" className="btn btn-danger" onClick={this.logoutAction}>Logout</button>*/}
+                <h4 style={{color: '#ecf0f1'}}>User Portal</h4>
+                <button type="button" className="btn btn-primary" onClick={this.uploadFile}>Upload</button>
+                {/*<IconButton aria-label="Logout" className={classes.margin} onClick={this.logoutAction}>*/}
+                {/*  <micon.ExitToApp style={{ color: "#ecf0f1" , fontSize: 40 }}  />*/}
+                {/*</IconButton>*/}
                 <IconButton aria-label="Logout" className={classes.margin} onClick={this.logoutAction}>
                   <micon.ExitToApp style={{ color: "#ecf0f1" , fontSize: 40 }}  />
                 </IconButton>
@@ -108,19 +117,19 @@ class adminPanel extends React.Component {
               {/* <h4 style={{color: '#8e44ad', textAlign: 'center', margin: '0px 0 10px 12.5%'}}>Requests</h4> */}
               <div className="box-container">
                 {/*<div className="ag-theme-alpine data-table">*/}
-                  <div className="table-scroll requestTable">
-                    <table className="table table-hover table-striped">
-                      <thead style={{ backgroundColor: "#005f50", color: "#dff9fb" }}>
-                      <tr key={"user_key1"}>
-                        <th scope="col">File Name</th>
-                        <th scope="col">Details</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      {this.loadFillData()}
-                      </tbody>
-                    </table>
-                  </div>
+                <div className="table-scroll requestTable">
+                  <table className="table table-hover table-striped">
+                    <thead style={{ backgroundColor: "#005f50", color: "#dff9fb" }}>
+                    <tr key={"user_key1"}>
+                      <th scope="col">File Name</th>
+                      <th scope="col">Details</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {this.loadFillData()}
+                    </tbody>
+                  </table>
+                </div>
                 {/*</div>*/}
               </div>
             </div>
@@ -133,14 +142,14 @@ class adminPanel extends React.Component {
                 />
             ) : null}
             <div
-          style={{
-            width: "100%",
-            backgroundColor: "#005f50",
-            height: "60px",
-            position: "fixed",
-            bottom: "0",
-          }}
-        ></div>
+                style={{
+                  width: "100%",
+                  backgroundColor: "#005f50",
+                  height: "60px",
+                  position: "fixed",
+                  bottom: "0",
+                }}
+            ></div>
           </div>
         </div>
     )
@@ -159,4 +168,4 @@ class adminPanel extends React.Component {
   // }
 }
 
-export default withStyles(styles, {withTheme: true})(adminPanel);
+export default withStyles(styles, {withTheme: true})(userpanel);
