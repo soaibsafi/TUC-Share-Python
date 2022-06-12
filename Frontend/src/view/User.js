@@ -44,7 +44,7 @@ class userpanel extends React.Component {
 
     if(typeof this.props.location.state === 'undefined'){
       that.loadFileList()
-    }else {
+    } else {
       that.setState({userInfo: that.props.location.state.userinfo}, () => {
         that.loadFileList()
       })
@@ -79,7 +79,7 @@ class userpanel extends React.Component {
 
   uploadFile(){
     // debugger
-    this.props.history.push({ pathname: "/upload", state:{userType: this.state.userInfo.user_type } });
+    this.props.history.push({ pathname: "/upload", state:{userType: this.state.userInfo.user_type, userinfo: this.state.userInfo} });
   }
 
   logoutAction(){
