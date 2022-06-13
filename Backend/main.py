@@ -216,6 +216,7 @@ def get_download_availablity(file_url: str, db: Session = Depends(get_db)):
     user_ip = helper.get_ip()
     print(user_ip)
     dn_info = query.download_availablity(file_url, user_ip, db)
+    print(dn_info.last_download_time)
     diff = "0"
     if dn_info:
         remain = dn_info.last_download_time + datetime.timedelta(minutes= 10)

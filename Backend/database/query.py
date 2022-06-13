@@ -144,7 +144,10 @@ def create_download_info(
     return db_download
 
 def download_availablity(file_hash, user_ip, db: Session):
-    dn_info = db.query(model.DownloadInfo).filter(
+    dn_info  = db.query(model.DownloadInfo).filter(
         and_(model.DownloadInfo.download_url == file_hash, 
-        model.DownloadInfo.user_ip == user_ip)).first()
+        model.DownloadInfo.user_ip == user_ip)).order_by(
+        model.DownloadInfo.download_id.desc()).first()
+    #dn_info = descending.first()
+    #print(dn_info.last_download_time)
     return dn_info
