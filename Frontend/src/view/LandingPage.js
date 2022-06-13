@@ -126,7 +126,7 @@ class LandingPage extends React.Component {
       this.state.selectedFile.name
     );
 
-    if(typeof this.state.userinfo === 'undefined'){
+    if(Object.keys(that.state.userinfo).length === 0 ){
       console.log("Login as guest")
       uploadFile(fileData, "GEUST", 0).then((response) => {
         console.log(response);

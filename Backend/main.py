@@ -24,7 +24,7 @@ model.Base.metadata.create_all(bind=engine)
 file_path = "./database/a.pdf"
 app = FastAPI()
 
-#tuc_session = session.get_session()
+tuc_session = session.get_session()
 
 origins = [
     "http://localhost",
