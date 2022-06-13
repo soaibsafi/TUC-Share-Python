@@ -44,27 +44,60 @@ class LandingPage extends React.Component {
 
   changeFileStatus(){
     var filehash = this.state.filehash
+    var that = this
 
     if(this.state.statusButtonName === 'Unblock'){
       unblockFile(filehash).then(res => {
-        debugger
         if(res.data.code === 204){
-          deleteRequest(reqID).then(res => {
-            alert("This file has been unblocked successfully")
-            that.close()
-          })
+          alert("This file has been unblocked successfully")
+          that.checkDocStatus(filehash)
         }
       })
     } else{
       blockFile(filehash).then(res => {
-        if(res.data.code === 210){ /// TODO : check the response code for hash creation
-          deleteRequest(reqID).then(res => {
-            alert("This file has been blocked successfully")
-            that.close()
-          })
+        if(res.data.code === 201){
+          alert("This file has been blocked successfully")
+          that.checkDocStatus(filehash)
         }
       })
     }
+  }
+
+  checkDocStatus(hash){
+    var that = this
+    var url =  this.props.location.pathname
+    checkFileStatus(hash).then(res => {
+      if(res.status === 200 && res.statusText === 'OK'){
+        if(res.data.fstatus === "Block"){
+          that.setState({statusButtonName: 'Unblock', downloadurl: url, isDisabled: true})
+        }else{
+          that.setState({statusButtonName: 'Block', downloadurl: url, isDisabled: false})
+        }
+      }
+      getFileInfo(hash).then(res => {
+        ///TODO : error throwing
+        if(res.status === 200 && res.statusText === "OK"){
+          var data = res.data
+
+          var filename = data.file_name + data.file_type
+          var filesize = data.file_size / 1024
+          var size = filesize > 1023 ? filesize/1024 : filesize
+          var sizeMatric = filesize > 1023 ? 'MB' : 'KB'
+          var reqDT = new Date(data.upload_date_time)
+          var requestDate = reqDT.toLocaleString()
+
+          that.setState({
+            fileInfo: res.data,
+            filehash: hash,
+            filename: filename,
+            filesize: size.toFixed(2),
+            sizeMatric: sizeMatric,
+            requestDate:requestDate,
+          }, () => {
+          })
+        }
+      })
+    })
   }
 
   backToUser(){
@@ -98,40 +131,7 @@ class LandingPage extends React.Component {
     var hash = url.split('/')[2]
     var that = this
 
-
-    checkFileStatus(hash).then(res => {
-      if(res.status === 200 && res.statusText === 'OK'){
-        if(res.data.fstatus === "Block"){
-          that.setState({statusButtonName: 'Unblock', downloadurl: url, isDisabled: true})
-        }else{
-          that.setState({statusButtonName: 'Block', downloadurl: url, isDisabled: false})
-        }
-      }
-      getFileInfo(hash).then(res => {
-        ///TODO : error throwing
-        if(res.status === 200 && res.statusText === "OK"){
-          var data = res.data
-
-          var filename = data.file_name + data.file_type
-          var filesize = data.file_size / 1024
-          var size = filesize > 1023 ? filesize/1024 : filesize
-          var sizeMatric = filesize > 1023 ? 'MB' : 'KB'
-          var reqDT = new Date(data.upload_date_time)
-          var requestDate = reqDT.toLocaleString()
-
-          that.setState({
-            fileInfo: res.data,
-            filehash: hash,
-            filename: filename,
-            filesize: size.toFixed(2),
-            sizeMatric: sizeMatric,
-            requestDate:requestDate,
-          }, () => {
-          })
-        }
-      })
-    })
-
+    this.checkDocStatus(hash)
   }
 
   loadFillData() {
@@ -147,10 +147,6 @@ class LandingPage extends React.Component {
         <br />
       </div>
     );
-  }
-
-
-  copyUrl(data) {
   }
 
   render() {
