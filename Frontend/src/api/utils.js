@@ -3,6 +3,22 @@ import axios from "axios"
 const host = "http://127.0.0.1:8000/"
 var url;
 
+export async function downloadInfo(hash, usertype, id){
+
+  if(usertype === 'GEUST') url = host + "downloadInfo?download_url=" + hash;
+
+  else{url = host + "downloadInfo?download_url=" + hash + "&user_id=" + id }
+
+  try{
+    const response = await axios.post(url, {
+      // headers:{'Content-Type': 'multipart/form-data'}
+    });
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
 export async function deleteFile(fileid){
   url = host + "file/" + fileid;
   try{
