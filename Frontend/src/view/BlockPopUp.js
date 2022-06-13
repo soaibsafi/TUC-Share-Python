@@ -2,7 +2,7 @@ import React from 'react';
 import '../App.css';
 import './Admin.css'
 
-import {checkFileStatus, blockFile, deleteRequest, unblockFile, getFileInfo} from "../api/utils";
+import {checkFileStatus, blockFile, deleteRequest, unblockFile, getFileInfo, saveRequest} from "../api/utils";
 
 const styles = theme => ({
   root: {},
@@ -19,12 +19,11 @@ class BlockPopUp extends React.Component {
       actionStatus: this.props.actionStatus,
       fileHash: this.props.fileHash,
       reason:'',
+      fileInfo: this.props.fileInfo
 
-
-      // requestDetails: this.props.requestDetails
     }
     this.handleChange=this.handleChange.bind(this);
-    this.changeFileStatus = this.changeFileStatus.bind(this);
+    this.changeFileStatus=this.changeFileStatus.bind(this);
 
     this.loadFillData = this.loadFillData.bind(this);
     this.close = this.close.bind(this);
@@ -38,25 +37,38 @@ class BlockPopUp extends React.Component {
     // that.props.reloadList();
   }
 
+  reloadFileStatus(hash){
+    var that = this
+    that.props.checkStatus(hash)
+  }
+
   changeFileStatus(){
-    var filehash = this.state.filehash
+    var filehash = this.state.fileHash
     var that = this
 
-    if(this.state.statusButtonName === 'Unblock'){
-      unblockFile(filehash).then(res => {
-        if(res.data.code === 204){
-          alert("This file has been unblocked successfully")
-          that.checkDocStatus(filehash)
+    if(this.state.reason.length !== 0){
+      saveRequest(this.state.fileInfo.file_id, this.state.reason).then(res => {
+        if (this.state.actionStatus === 'Unblock') {
+          unblockFile(filehash).then(res => {
+            if (res.data.code === 204) {
+              alert("The request has been submitted successfully")
+              that.props.history.push({ pathname: "/" });
+            }
+          })
+        } else {
+          blockFile(filehash).then(res => {
+            if (res.data.code === 201) {
+              alert("The request has been submitted successfully")
+              that.props.history.push({ pathname: "/" });
+            }
+          })
         }
       })
     } else{
-      blockFile(filehash).then(res => {
-        if(res.data.code === 201){
-          alert("This file has been blocked successfully")
-          that.checkDocStatus(filehash)
-        }
-      })
+      alert("Please insert reason")
     }
+
+
   }
 
   checkDocStatus(hash){
@@ -138,12 +150,6 @@ class BlockPopUp extends React.Component {
       alert("This file has been rejected successfully")
       that.close()
     })
-  }
-
-  close() {
-    var that = this
-    that.props.closePopup();
-    that.props.reloadList();
   }
 
   loadFillData() {

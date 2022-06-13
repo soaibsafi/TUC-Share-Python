@@ -3,6 +3,23 @@ import axios from "axios"
 const host = "http://127.0.0.1:8000/"
 var url;
 
+export async function saveRequest( fileid, reason){
+  url = host + "request"
+
+  var data ={
+    "req_id": 0,
+    "reason": reason,
+    "file_id": fileid
+  }
+
+  try{
+    const response = await axios.post(url, data);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
 export async function downloadAvailablity(hash){
   url = host + "downloadAvailablity?file_url=" + hash
   try{

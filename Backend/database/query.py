@@ -53,6 +53,7 @@ def get_file_info(db: Session, file_hash: str):
         model.FileInfo.file_type,
         model.FileInfo.upload_date_time,
         model.FileInfo.status,
+        model.FileInfo.file_id,
         model.FileInfo.user_ip,
         model.FileInfo.user_id
         ).filter(model.FileInfo.file_hash == file_hash).first()
@@ -146,7 +147,7 @@ def create_download_info(
 
 def download_availablity(file_hash, user_ip, db: Session):
     dn_info  = db.query(model.DownloadInfo).filter(
-        and_(model.DownloadInfo.download_url == file_hash, 
+        and_(model.DownloadInfo.download_url == file_hash,
         model.DownloadInfo.user_ip == user_ip)).order_by(
         model.DownloadInfo.download_id.desc()).first()
     #dn_info = descending.first()

@@ -34,6 +34,7 @@ class LandingPage extends React.Component {
       downloadurl: '',
       isDisabled: false,
       hidePopup: true,
+      url: this.props.location.pathname,
       userinfo: (typeof this.props.location.state === 'undefined') ? {} : this.props.location.state.userinfo,
       userType: (typeof this.props.location.state === 'undefined') ? {} :  this.props.location.state.userType
     };
@@ -55,8 +56,10 @@ class LandingPage extends React.Component {
   }
 
   checkDocStatus(hash){
+    debugger
     var that = this
-    var url =  this.props.location.pathname
+    var url =  this.state.url
+
     checkFileStatus(hash).then(res => {
       if(res.status === 200 && res.statusText === 'OK'){
         if(res.data.fstatus === "Block"){
@@ -135,7 +138,6 @@ class LandingPage extends React.Component {
     var hash = url.split('/')[2]
     var that = this
 
-
     this.checkDocStatus(hash)
   }
 
@@ -155,6 +157,7 @@ class LandingPage extends React.Component {
   }
 
   render() {
+    var those = this
     return (
       <div className="fill-window">
         <div
@@ -201,11 +204,10 @@ class LandingPage extends React.Component {
             <BlockPopUp
                 actionStatus={this.state.statusButtonName}
                 fileHash={this.state.filehash}
-
-                // requestDetails={this.state.requestDetails}
-                // popupHeaderText={this.state.popupHeaderText}
-                // reloadList={this.loadRequestList}
-                 closePopup={this.switchPopup}
+                fileInfo={this.state.fileInfo}
+                checkStatus={those.checkDocStatus}
+                closePopup={this.switchPopup}
+                {...this.props}
             />
         ) : null}
         <div
