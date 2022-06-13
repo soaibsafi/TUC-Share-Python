@@ -140,11 +140,6 @@ class BlockPopUp extends React.Component {
     })
   }
 
-  close() {
-    var that = this
-    that.props.closePopup();
-    that.props.reloadList();
-  }
 
   loadFillData() {
     if (this.state.requestDetails.length) {
