@@ -7,6 +7,7 @@ import datetime
 import aiofiles
 import base64
 from base64 import b64encode
+import schedule
 
 from fastapi import Depends, FastAPI, HTTPException, File, UploadFile, Response, Body
 from fastapi.responses import StreamingResponse
@@ -24,7 +25,7 @@ model.Base.metadata.create_all(bind=engine)
 file_path = "./database/a.pdf"
 app = FastAPI()
 
-tuc_session = session.get_session()
+#tuc_session = session.get_session()
 
 origins = [
     "http://localhost",
@@ -41,6 +42,8 @@ app.add_middleware(
 )
 
 
+
+schedule.every().day.at("00:00").do(query.delete_file_scheduled)
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -230,3 +233,7 @@ def get_download_availablity(file_url: str, db: Session = Depends(get_db)):
             return "Allow Download"
     else:
         return "First Download"
+
+@app.delete("/scheduleDelete")
+def delete_file(db: Session = Depends(get_db)):
+    return query.delete_file_scheduled(db)
