@@ -24,7 +24,7 @@ model.Base.metadata.create_all(bind=engine)
 file_path = "./database/a.pdf"
 app = FastAPI()
 
-tuc_session = session.get_session()
+#tuc_session = session.get_session()
 
 origins = [
     "http://localhost",
@@ -214,4 +214,18 @@ def get_download_info(download_url: str, user_id: int=None, db: Session = Depend
 @app.get("/downloadAvailablity")
 def get_download_availablity(file_url: str, db: Session = Depends(get_db)):
     user_ip = helper.get_ip()
-    da = query.download_availablity(file_url, user_ip, db)
+    print(user_ip)
+    dn_info = query.download_availablity(file_url, user_ip, db)
+    diff = "0"
+    if dn_info:
+        remain = dn_info.last_download_time + datetime.timedelta(minutes= 10)
+        diff =  remain - datetime.datetime.now()
+        total_sec = diff.total_seconds()
+        min = round(total_sec/60)
+        sec = round(total_sec%60)
+        res = 'Possible download after {} minutes, {} seconds'.format(min, sec)
+
+        if min < 10 and min >0:
+            return res
+        else:
+            return True

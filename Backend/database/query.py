@@ -1,3 +1,4 @@
+from operator import and_
 from sqlalchemy.orm import Session
 from sqlalchemy import delete
 from database.db_config import engine
@@ -143,4 +144,7 @@ def create_download_info(
     return db_download
 
 def download_availablity(file_hash, user_ip, db: Session):
-    pass
+    dn_info = db.query(model.DownloadInfo).filter(
+        and_(model.DownloadInfo.download_url == file_hash, 
+        model.DownloadInfo.user_ip == user_ip)).first()
+    return dn_info
