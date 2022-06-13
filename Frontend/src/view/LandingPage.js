@@ -1,5 +1,5 @@
 import React from "react";
-import { uploadFile } from "../api/utils";
+import {clearCache, uploadFile} from "../api/utils";
 import "./All.css";
 
 import TextField from "@material-ui/core/TextField";
@@ -132,7 +132,9 @@ class LandingPage extends React.Component {
         console.log(response);
         var status_code = response.data.hasOwnProperty('status_code')
         if(status_code) alert(response.data.detail)
-        else that.loadFilesInList(response)
+        else {
+          clearCache().then(res => {that.loadFilesInList(response)})
+        }
       });
     } else{
       console.log("Login as user")
@@ -140,7 +142,9 @@ class LandingPage extends React.Component {
         console.log(response);
         var status_code = response.data.hasOwnProperty('status_code')
         if(status_code) alert(response.data.detail)
-        else that.loadFilesInList(response)
+        else {
+          clearCache().then(res => {that.loadFilesInList(response)})
+        }
       });
     }
 
