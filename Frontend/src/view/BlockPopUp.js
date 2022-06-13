@@ -67,8 +67,6 @@ class BlockPopUp extends React.Component {
     } else{
       alert("Please insert reason")
     }
-
-
   }
 
   checkDocStatus(hash){

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import './All.css';
 import './Admin.css'
 
 import {checkFileStatus, blockFile, deleteRequest, unblockFile} from "../api/utils";
