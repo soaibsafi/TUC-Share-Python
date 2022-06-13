@@ -6,6 +6,7 @@ from database.db_config import engine
 from . import model, schemas
 from utils import hash
 import base64
+import datetime
 
 
 def create_user(db: Session, user: schemas.User):
@@ -151,3 +152,17 @@ def download_availablity(file_hash, user_ip, db: Session):
     #dn_info = descending.first()
     #print(dn_info.last_download_time)
     return dn_info
+
+
+def delete_file_scheduled(db: Session):
+    current_time = datetime.datetime.now()
+    print(current_time)
+    schedule_time = current_time - datetime.timedelta(days = 14)
+    print(schedule_time)
+    files = db.query(model.FileInfo).filter(model.FileInfo.upload_date_time < schedule_time).all()
+    if files==None:
+        return False
+    for file in files :
+        db.delete(file)
+    db.commit()
+    return True
