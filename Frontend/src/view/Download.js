@@ -57,7 +57,6 @@ class LandingPage extends React.Component {
   }
 
   checkDocStatus(hash){
-    debugger
     var that = this
     var url =  this.state.url
 

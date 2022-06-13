@@ -115,6 +115,10 @@ class userpanel extends React.Component {
         var reqDT = new Date(data.upload_date_time)
         var requestDate = reqDT.toLocaleString()
 
+        var status = ''
+        if(data.status === "200") status = "Unblocked"
+        else if(data.status === "210") status = "Blocked"
+
         var downloadURL = redirectpath + data.file_hash  ///http://localhost:3000/download/50ce455d63fde3c33d727ceab15f3577a62b6e567e26153a9b74064f9a9f8490
         return (
             <tr className="d-flex"  key={data.file_hash}>
@@ -122,7 +126,7 @@ class userpanel extends React.Component {
               <td className="col-1">{size.toFixed(2)} {sizeMatric}</td>
               <td className="col-2">{requestDate}</td>
               <td className="col-3">{downloadURL}</td>
-              <td className="col-1">{data.status}</td>
+              <td className="col-1">{status}</td>
               <td>{<IconButton className="btn btn-info col-sm" onClick={() => this.removeFile(data)}>
                 <micon.RemoveCircle style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
