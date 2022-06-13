@@ -97,8 +97,7 @@ class LandingPage extends React.Component {
   }
 
   copyUrl(data) {
-    debugger;
-    console.log(data);
+    navigator.clipboard.writeText(data.downloadUrl)
   }
 
   addFile() {
@@ -109,23 +108,47 @@ class LandingPage extends React.Component {
       this.state.selectedFile,
       this.state.selectedFile.name
     );
-    uploadFile(fileData).then((response) => {
-      console.log(response);
-      var tempList = that.state.filesList;
-      var downloadUrl =
-        "http://localhost:3000/" + response.data.filehash;
-      var fileName = that.state.selectedFile.name;
-      var hashId = response.data.fileHash;
 
-      var obj = {
-        fileName,
-        downloadUrl,
-        hashId,
-      };
+    if(typeof this.state.userinfo === 'undefined'){
+      console.log("Login as guest")
+      uploadFile(fileData, "GEUST", 0).then((response) => {
+        console.log(response);
+        var tempList = that.state.filesList;
+        var downloadUrl =
+          "http://localhost:3000/download/" + response.data.file_hash;
+        var fileName = that.state.selectedFile.name;
+        var hashId = response.data.file_hash;
 
-      tempList.push(obj);
-      that.setState({ filesList: tempList }, console.log(that.state.filesList));
-    });
+        var obj = {
+          fileName,
+          downloadUrl,
+          hashId,
+        };
+
+        tempList.push(obj);
+        that.setState({ filesList: tempList }, console.log(that.state.filesList));
+      });
+    } else{
+      console.log("Login as user")
+      uploadFile(fileData, "USER", this.state.userinfo.user_id).then((response) => {
+        console.log(response);
+        var tempList = that.state.filesList;
+        var downloadUrl =
+          "http://localhost:3000/download/" + response.data.file_hash;
+        var fileName = that.state.selectedFile.name;
+        var hashId = response.data.file_hash;
+
+        var obj = {
+          fileName,
+          downloadUrl,
+          hashId,
+        };
+
+        tempList.push(obj);
+        that.setState({ filesList: tempList }, console.log(that.state.filesList));
+      });
+    }
+
   }
 
   selectFile() {
@@ -174,7 +197,7 @@ class LandingPage extends React.Component {
             }}
           >
             <div className="main-title-area">
-              <div class="site-identity">
+              <div className="site-identity">
                 <a href="#">
                   <img
                     src="https://www.tu-chemnitz.de/tucal4/img/logo-ua.svg"

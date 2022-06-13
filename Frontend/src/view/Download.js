@@ -1,7 +1,14 @@
 import React from "react";
 import "./Download.css";
 import { withStyles } from "@material-ui/core/styles";
-import { getFileInfo, checkFileStatus, downloadFileAsGuest, clearCache, downloadFileAsUser } from "../api/utils";
+import {
+  getFileInfo,
+  checkFileStatus,
+  downloadFileAsGuest,
+  clearCache,
+  downloadFileAsUser,
+  unblockFile, deleteRequest, blockFile
+} from "../api/utils";
 import "./LandingPage.css";
 
 var FileSaver = require('file-saver');
@@ -15,7 +22,6 @@ const styles = (theme) => ({
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props)
     this.state = {
       filehash:'',
       fileInfo:[],
@@ -33,6 +39,32 @@ class LandingPage extends React.Component {
     this.loadFillData = this.loadFillData.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
     this.backToUser = this.backToUser.bind(this);
+    this.changeFileStatus = this.changeFileStatus.bind(this);
+  }
+
+  changeFileStatus(){
+    var filehash = this.state.filehash
+
+    if(this.state.statusButtonName === 'Unblock'){
+      unblockFile(filehash).then(res => {
+        debugger
+        if(res.data.code === 204){
+          deleteRequest(reqID).then(res => {
+            alert("This file has been unblocked successfully")
+            that.close()
+          })
+        }
+      })
+    } else{
+      blockFile(filehash).then(res => {
+        if(res.data.code === 210){ /// TODO : check the response code for hash creation
+          deleteRequest(reqID).then(res => {
+            alert("This file has been blocked successfully")
+            that.close()
+          })
+        }
+      })
+    }
   }
 
   backToUser(){
@@ -43,7 +75,6 @@ class LandingPage extends React.Component {
   downloadFile(){
     var that = this
     if(Object.keys(that.state.userinfo).length !== 0 ){
-      console.log("download as user")
       downloadFileAsUser(this.state.filehash, that.state.filename).then(res => {
         if (res.status === 200 && res.statusText === "OK") {
           let url = donwloadhost + "download/" + that.state.filehash + "/" + that.state.filename
@@ -52,7 +83,6 @@ class LandingPage extends React.Component {
         }
       })
     } else{
-      console.log("download as guest")
       downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
         if (res.status === 200 && res.statusText === "OK") {
           let url = donwloadhost + "guestDownload/" + that.state.filehash + "/" + that.state.filename
@@ -78,6 +108,7 @@ class LandingPage extends React.Component {
         }
       }
       getFileInfo(hash).then(res => {
+        ///TODO : error throwing
         if(res.status === 200 && res.statusText === "OK"){
           var data = res.data
 
@@ -120,7 +151,6 @@ class LandingPage extends React.Component {
 
 
   copyUrl(data) {
-    console.log(data);
   }
 
   render() {
@@ -162,7 +192,7 @@ class LandingPage extends React.Component {
             Download
           </button>
 
-          <button className="btn block mr-1" onClick={this.uploadFile}>
+          <button className="btn block mr-1" onClick={this.changeFileStatus}>
             {this.state.statusButtonName}
           </button>
         </div>

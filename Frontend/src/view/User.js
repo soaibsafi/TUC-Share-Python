@@ -79,13 +79,12 @@ class userpanel extends React.Component {
   }
 
   logoutAction(){
-    debugger
     this.props.history.push({ pathname: "/" , state:{userType: ""}});
   }
 
   loadFileList(){
     getFileList(this.state.userInfo.user_id).then(res => {
-      console.log(res)
+     /// console.log(res)
       if (res.status === 200 && res.statusText === "OK") {
         this.setState({fileList: res.data[0]})
       }
@@ -150,7 +149,7 @@ class userpanel extends React.Component {
             }}
           >
             <div className="main-title-area">
-              <div class="site-identity">
+              <div className="site-identity">
                 <a href="#">
                   <img
                     src="https://www.tu-chemnitz.de/tucal4/img/logo-ua.svg"

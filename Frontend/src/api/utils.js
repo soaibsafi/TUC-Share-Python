@@ -115,9 +115,9 @@ export async function getRequests(){
   }
 }
 
-export async function uploadFile(fileData){
-  url = host + "uploadFile";
-
+export async function uploadFile(fileData, usertype, id){
+  if(usertype === 'GEUST') url = host + "uploadFile";
+  else{url = host + "uploadFile?user_id=" + id }
   try{
     const response = await axios.post(url, fileData, {
       // headers:{'Content-Type': 'multipart/form-data'}
