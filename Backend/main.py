@@ -205,3 +205,13 @@ async def download_as_guest(file_url: str , db: Session = Depends(get_db)):
     file_path = query.write_single_file(file_url, db)
     return StreamingResponse(helper.get_guest_download_file(file_path))
 
+@app.post("/downloadInfo")
+def get_download_info(download_url: str, user_id: int=None, db: Session = Depends(get_db)):
+    download_date_time = datetime.datetime.now()
+    user_ip = helper.get_ip()
+    return query.create_download_info(user_ip, download_date_time, download_url, user_id, db)
+
+@app.get("/downloadAvailablity")
+def get_download_availablity(file_url: str, db: Session = Depends(get_db)):
+    user_ip = helper.get_ip()
+    da = query.download_availablity(file_url, user_ip, db)

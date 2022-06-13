@@ -124,3 +124,23 @@ def write_single_file(file_hash:str, db: Session):
     finally:
         fl.close()
     return filepath
+
+def create_download_info(
+        user_ip,
+        download_date_time,
+        file_hash,
+        user_id,
+        db: Session):
+    db_download = model.DownloadInfo(
+        user_ip = user_ip,
+        last_download_time = download_date_time,
+        download_url = file_hash,
+        user_id = user_id
+    )
+    db.add(db_download)
+    db.commit()
+    db.refresh(db_download)
+    return db_download
+
+def download_availablity(file_hash, user_ip, db: Session):
+    pass
