@@ -7,7 +7,7 @@ import {
   downloadFileAsGuest,
   clearCache,
   downloadFileAsUser,
-  unblockFile, downloadInfo, blockFile
+  unblockFile, downloadInfo, blockFile, downloadAvailablity
 } from "../api/utils";
 import "./LandingPage.css";
 
@@ -108,25 +108,32 @@ class LandingPage extends React.Component {
   downloadFile(){
     var that = this
     if(Object.keys(that.state.userinfo).length !== 0 ){
-      downloadFileAsUser(this.state.filehash, that.state.filename).then(res => {
-        if (res.status === 200 && res.statusText === "OK") {
-          let url = donwloadhost + "download/" + that.state.filehash + "/" + that.state.filename
-          FileSaver.saveAs(url, that.state.filename);
-          downloadInfo(this.state.filehash, 'USER', that.state.userinfo.user_id).then(res => {
-            clearCache().then(res => {})
-          })
-        }
-      })
+        downloadFileAsUser(this.state.filehash, that.state.filename).then(res => {
+          if (res.status === 200 && res.statusText === "OK") {
+            let url = donwloadhost + "download/" + that.state.filehash + "/" + that.state.filename
+            FileSaver.saveAs(url, that.state.filename);
+            downloadInfo(this.state.filehash, 'USER', that.state.userinfo.user_id).then(res => {
+              clearCache().then(res => {})
+            })
+          }
+        })
     } else{
-      downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
-        if (res.status === 200 && res.statusText === "OK") {
-          let url = donwloadhost + "guestDownload/" + that.state.filehash + "/" + that.state.filename
-          FileSaver.saveAs(url, that.state.filename);
-          downloadInfo(this.state.filehash, 'GEUST', 0).then(res => {
-            clearCache().then(res => {})
+      downloadAvailablity(this.state.filehash).then(res => {
+        if(res.data === "First Download" || res.data === "Allow Download"){
+          downloadFileAsGuest(this.state.filehash, that.state.filename).then(res => {
+              if (res.status === 200 && res.statusText === "OK") {
+                let url = donwloadhost + "guestDownload/" + that.state.filehash + "/" + that.state.filename
+                FileSaver.saveAs(url, that.state.filename);
+                downloadInfo(this.state.filehash, 'GEUST', 0).then(res => {
+                  clearCache().then(res => {})
+                })
+              }
           })
+        }else{
+          alert(res.data)
         }
       })
+
     }
   }
 

@@ -3,6 +3,16 @@ import axios from "axios"
 const host = "http://127.0.0.1:8000/"
 var url;
 
+export async function downloadAvailablity(hash){
+  url = host + "downloadAvailablity?file_url=" + hash
+  try{
+    const response = await axios.get(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
 export async function downloadInfo(hash, usertype, id){
 
   if(usertype === 'GEUST') url = host + "downloadInfo?download_url=" + hash;
