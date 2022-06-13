@@ -10,6 +10,7 @@ import {
   unblockFile, downloadInfo, blockFile, downloadAvailablity
 } from "../api/utils";
 import "./LandingPage.css";
+import BlockPopUp from "./BlockPopUp";
 
 var FileSaver = require('file-saver');
 
@@ -32,6 +33,7 @@ class LandingPage extends React.Component {
       statusButtonName: '',
       downloadurl: '',
       isDisabled: false,
+      hidePopup: true,
       userinfo: (typeof this.props.location.state === 'undefined') ? {} : this.props.location.state.userinfo,
       userType: (typeof this.props.location.state === 'undefined') ? {} :  this.props.location.state.userType
     };
@@ -39,28 +41,17 @@ class LandingPage extends React.Component {
     this.loadFillData = this.loadFillData.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
     this.backToUser = this.backToUser.bind(this);
-    this.changeFileStatus = this.changeFileStatus.bind(this);
+    // this.changeFileStatus = this.changeFileStatus.bind(this);
+    this.openPopUp = this.openPopUp.bind(this);
+    this.switchPopup = this.switchPopup.bind(this);
   }
 
-  changeFileStatus(){
-    var filehash = this.state.filehash
-    var that = this
+  openPopUp(){
+    this.switchPopup();
+  }
 
-    if(this.state.statusButtonName === 'Unblock'){
-      unblockFile(filehash).then(res => {
-        if(res.data.code === 204){
-          alert("This file has been unblocked successfully")
-          that.checkDocStatus(filehash)
-        }
-      })
-    } else{
-      blockFile(filehash).then(res => {
-        if(res.data.code === 201){
-          alert("This file has been blocked successfully")
-          that.checkDocStatus(filehash)
-        }
-      })
-    }
+  switchPopup() {
+    this.setState({ hidePopup: !this.state.hidePopup });
   }
 
   checkDocStatus(hash){
@@ -99,6 +90,8 @@ class LandingPage extends React.Component {
       })
     })
   }
+
+
 
   backToUser(){
     var that = this
@@ -141,6 +134,7 @@ class LandingPage extends React.Component {
     var url =  this.props.location.pathname
     var hash = url.split('/')[2]
     var that = this
+
 
     this.checkDocStatus(hash)
   }
@@ -199,10 +193,21 @@ class LandingPage extends React.Component {
             Download
           </button>
 
-          <button className="btn block mr-1" onClick={this.changeFileStatus}>
+          <button className="btn block mr-1" onClick={this.openPopUp}>
             {this.state.statusButtonName}
           </button>
         </div>
+        {!this.state.hidePopup ? (
+            <BlockPopUp
+                actionStatus={this.state.statusButtonName}
+                fileHash={this.state.filehash}
+
+                // requestDetails={this.state.requestDetails}
+                // popupHeaderText={this.state.popupHeaderText}
+                // reloadList={this.loadRequestList}
+                 closePopup={this.switchPopup}
+            />
+        ) : null}
         <div
           style={{
             width: "100%",
