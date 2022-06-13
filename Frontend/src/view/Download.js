@@ -7,7 +7,7 @@ import {
   downloadFileAsGuest,
   clearCache,
   downloadFileAsUser,
-  unblockFile, deleteRequest, blockFile
+  unblockFile, downloadInfo, blockFile
 } from "../api/utils";
 import "./LandingPage.css";
 
@@ -112,7 +112,9 @@ class LandingPage extends React.Component {
         if (res.status === 200 && res.statusText === "OK") {
           let url = donwloadhost + "download/" + that.state.filehash + "/" + that.state.filename
           FileSaver.saveAs(url, that.state.filename);
-          clearCache().then(res => {})
+          downloadInfo(this.state.filehash, 'USER', that.state.userinfo.user_id).then(res => {
+            clearCache().then(res => {})
+          })
         }
       })
     } else{
@@ -120,7 +122,9 @@ class LandingPage extends React.Component {
         if (res.status === 200 && res.statusText === "OK") {
           let url = donwloadhost + "guestDownload/" + that.state.filehash + "/" + that.state.filename
           FileSaver.saveAs(url, that.state.filename);
-          clearCache().then(res => {})
+          downloadInfo(this.state.filehash, 'GEUST', 0).then(res => {
+            clearCache().then(res => {})
+          })
         }
       })
     }
