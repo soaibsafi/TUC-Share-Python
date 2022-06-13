@@ -65,10 +65,12 @@ class userpanel extends React.Component {
   }
 
   removeFile(data){
+    var that = this
     if(confirm("Are you sure you want to delete?")){
       deleteFile(data.file_id).then(res => {
         if(res.status === 200 && res.statusText === "OK"){
           alert("Your file has been removed successfully")
+          that.loadFileList()
         }
       })
     }
@@ -84,7 +86,6 @@ class userpanel extends React.Component {
 
   loadFileList(){
     getFileList(this.state.userInfo.user_id).then(res => {
-     /// console.log(res)
       if (res.status === 200 && res.statusText === "OK") {
         this.setState({fileList: res.data[0]})
       }
