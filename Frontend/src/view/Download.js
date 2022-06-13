@@ -10,6 +10,7 @@ import {
   unblockFile, downloadInfo, blockFile, downloadAvailablity
 } from "../api/utils";
 import "./LandingPage.css";
+import "./All.css";
 import BlockPopUp from "./BlockPopUp";
 
 var FileSaver = require('file-saver');
