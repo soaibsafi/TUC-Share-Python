@@ -100,6 +100,23 @@ class LandingPage extends React.Component {
     navigator.clipboard.writeText(data.downloadUrl)
   }
 
+  loadFilesInList(response){
+    var that = this;
+    var tempList = that.state.filesList;
+    var downloadUrl =
+        "http://localhost:3000/download/" + response.data.file_hash;
+    var fileName = that.state.selectedFile.name;
+    var hashId = response.data.file_hash;
+
+    var obj = {
+      fileName,
+      downloadUrl,
+      hashId,
+    };
+    tempList.push(obj);
+    that.setState({ filesList: tempList }, console.log(that.state.filesList));
+  }
+
   addFile() {
     var that = this;
     const fileData = new FormData();
@@ -109,44 +126,21 @@ class LandingPage extends React.Component {
       this.state.selectedFile.name
     );
 
-    debugger
     if(typeof this.state.userinfo === 'undefined'){
       console.log("Login as guest")
       uploadFile(fileData, "GEUST", 0).then((response) => {
         console.log(response);
-        var tempList = that.state.filesList;
-        var downloadUrl =
-          "http://localhost:3000/download/" + response.data.file_hash;
-        var fileName = that.state.selectedFile.name;
-        var hashId = response.data.file_hash;
-
-        var obj = {
-          fileName,
-          downloadUrl,
-          hashId,
-        };
-
-        tempList.push(obj);
-        that.setState({ filesList: tempList }, console.log(that.state.filesList));
+        var status_code = response.data.hasOwnProperty('status_code')
+        if(status_code) alert(response.data.detail)
+        else that.loadFilesInList(response)
       });
     } else{
       console.log("Login as user")
       uploadFile(fileData, "USER", this.state.userinfo.user_id).then((response) => {
         console.log(response);
-        var tempList = that.state.filesList;
-        var downloadUrl =
-          "http://localhost:3000/download/" + response.data.file_hash;
-        var fileName = that.state.selectedFile.name;
-        var hashId = response.data.file_hash;
-
-        var obj = {
-          fileName,
-          downloadUrl,
-          hashId,
-        };
-
-        tempList.push(obj);
-        that.setState({ filesList: tempList }, console.log(that.state.filesList));
+        var status_code = response.data.hasOwnProperty('status_code')
+        if(status_code) alert(response.data.detail)
+        else that.loadFilesInList(response)
       });
     }
 

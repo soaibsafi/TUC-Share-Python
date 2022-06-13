@@ -87,7 +87,7 @@ async def upload_file(user_id: int = None, file: UploadFile = File(...),  db : S
         file_size = len(contents)
         print(file_size)
         if file_size > 10485760:
-            return {"Error": "Max 10 MiB File Allowed"}
+            return HTTPException(status_code=400, detail="Max 10 MiB File Allowed")
         with open("cache/"+file.filename, 'wb') as f:
             f.write(contents)
         print("cache/"+filename)
