@@ -45,6 +45,7 @@ class LandingPage extends React.Component {
     this.backToUser = this.backToUser.bind(this);
     this.openPopUp = this.openPopUp.bind(this);
     this.switchPopup = this.switchPopup.bind(this);
+    this.checkDocStatus = this.checkDocStatus.bind(this)
   }
 
   openPopUp(){
@@ -186,7 +187,7 @@ class LandingPage extends React.Component {
         </div>
 
         <div className="btn-group reqButton" role="group">
-          <button className="btn download mr-1" disabled={this.state.isDisabled} style={{display: Object.keys(this.state.userinfo).length === 0  ? 'none' : ''}} onClick={this.backToUser}>
+          <button className="btn download mr-1" style={{display: Object.keys(this.state.userinfo).length === 0  ? 'none' : ''}} onClick={this.backToUser}>
             Back
           </button>
           <button className="btn download mr-1" disabled={this.state.isDisabled} onClick={this.downloadFile}>
@@ -202,9 +203,8 @@ class LandingPage extends React.Component {
                 actionStatus={this.state.statusButtonName}
                 fileHash={this.state.filehash}
                 fileInfo={this.state.fileInfo}
-                checkStatus={those.checkDocStatus}
+                checkStatus={this.checkDocStatus}
                 closePopup={this.switchPopup}
-                {...this.props}
             />
         ) : null}
         <div
