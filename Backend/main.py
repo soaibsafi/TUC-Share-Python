@@ -25,7 +25,7 @@ model.Base.metadata.create_all(bind=engine)
 file_path = "./database/a.pdf"
 app = FastAPI()
 
-tuc_session = session.get_session()
+#tuc_session = session.get_session()
 
 origins = [
     "http://localhost",
@@ -54,7 +54,6 @@ def get_db():
 
 @app.post("/users/", response_model=schemas.User)
 async def create_user(user: schemas.User, db: Session = Depends(get_db)):
-    print(user)
     return query.create_user(db=db, user=user)
 
 @app.get("/users/{user_id}", response_model=schemas.User)
@@ -68,7 +67,6 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 def login_validation(user: Dict[str, str], db: Session = Depends(get_db)):
     username = user["username"]
     password = user["password"]
-    print(user)
     db_user = query.get_user_by_username(db, username)
     if db_user==None:
         raise HTTPException(status_code=404, detail="User Not Found")
@@ -80,7 +78,6 @@ def login_validation(user: Dict[str, str], db: Session = Depends(get_db)):
 
 @app.post("/uploadFile")
 async def upload_file(user_id: int = None, file: UploadFile = File(...),  db : Session = Depends(get_db)):
-    print(file)
     filename = file.filename
     root_name, file_type = os.path.splitext(filename)
     upload_date_time = datetime.datetime.now()
@@ -88,17 +85,13 @@ async def upload_file(user_id: int = None, file: UploadFile = File(...),  db : S
     try:
         contents = await file.read()
         file_size = len(contents)
-        print(file_size)
         if file_size > 10485760:
             return HTTPException(status_code=400, detail="Max 10 MiB File Allowed")
         with open("cache/"+file.filename, 'wb') as f:
             f.write(contents)
-        print("cache/"+filename)
         file_hash = hash.hash_file("cache/"+filename)
-        print(file_hash)
         url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
         s = tuc_session.get(url)
-        print(s.status_code)
         status = s.status_code
     except Exception:
         return {"Error": "Upload Error"} # TODO : remove this hash id
@@ -217,7 +210,6 @@ def get_download_info(download_url: str, user_id: int=None, db: Session = Depend
 @app.get("/downloadAvailablity")
 def get_download_availablity(file_url: str, db: Session = Depends(get_db)):
     user_ip = helper.get_ip()
-    print(user_ip)
     dn_info = query.download_availablity(file_url, user_ip, db)
     if dn_info:
         remain = dn_info.last_download_time + datetime.timedelta(minutes= 10)

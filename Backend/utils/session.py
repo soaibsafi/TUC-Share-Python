@@ -24,7 +24,6 @@ def get_session():
   driver.find_element(By.XPATH, "//input[@value='Go on']").submit()
   driver.find_element(By.ID, 'password').send_keys(os.getenv('PASSWORD'))
   driver.find_element(By.XPATH, "//input[@value='Login']").submit()
-  print(driver.session_id)
   driver.get(url)
   time.sleep(10)
   headers = {

@@ -1,15 +1,62 @@
 # TUC-Share-Python
 
-1. Create Virtual environment-
+## Backend
 
-- `python -m venv .venv`
+1. Go to *Backend* directory-
+```
+cd Backend
+```
 
+2. Create Virtual environment-
+```
+python -m venv .venv
+```
 2. Activate the virtual environment- 
 
-- `.\.venv\Scripts\activate`
+- (For Windows)-  `.\.venv\Scripts\activate`
+- (For macOS/Linux)- `source .venv/bin/activate`
 
 3. Install the required package-
 
-- `pip install -r requirements.txt`
+```
+pip install -r requirements.txt
+```
 
+4. Create a `.env` file which contain the *USERNAME* and *PASSWORD* of TU Chemnitz. Put the following line inside the `.env` file- 
+
+```
+USERNAM=<TUC USERANME>
+PASSWORD=<TUC PASSWORD>
+```
+
+5. Strat the *Backend* using- 
+```
+uvicorn main:app --reload
+```
+
+6. The *Backend* will be running on- 
+- *http://127.0.0.1:8000/*
+
+7. The API documentation could be found at- 
+- *http://127.0.0.1:8000/docs*
+
+---
+## Frontend
+
+1. Go to *Frontend*  directory-
+```
+cd Frontend
+```
+2. Install the required package-
+
+```
+yarn install
+```
+3. Strat the *Frontend* using- 
+```
+yarn start
+```
+
+4. The *Frontend* will be running on- 
+- *http://127.0.0.1:3000/*
 

@@ -5,7 +5,6 @@ import glob
 def get_ip():
     response = requests.get(url = "https://ipgeolocation.abstractapi.com/v1/?api_key=a6c7fa75b0894a56af54c76a30a9088f")
     data = response.json()
-    print(data["ip_address"])
     return data["ip_address"]
 
 def get_blocking_status(hash):
@@ -32,7 +31,6 @@ def get_guest_download_file(file_path):
 def clear_cache():
     cache_dir = "./cache/"
     filelist = glob.glob(os.path.join(cache_dir, "*"))
-    print(filelist)
     for f in filelist:
         os.remove(f)
 
@@ -50,5 +48,3 @@ def file_status(code):
 
 def days_hours_minutes(td):
     return td.days, td.seconds//3600, (td.seconds//60)%60
-
-get_ip()

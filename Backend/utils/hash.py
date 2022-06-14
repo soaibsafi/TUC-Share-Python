@@ -7,7 +7,6 @@ salt = os.urandom(32)
 
 def hash_passpord(password):
     plaintext = password.encode()
-    print(plaintext)
     d = hashlib.sha256(plaintext)
     hash = d.hexdigest()
     return hash

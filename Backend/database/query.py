@@ -95,8 +95,6 @@ def get_all_pending_request(db: Session):
         model.RequestInfo.reason,
         model.RequestInfo.req_id
         ).filter(model.RequestInfo.file_id == model.FileInfo.file_id).all()
-    #t = db.query(model.RequestInfo).all()
-    print(data)
     return data
 
 
@@ -150,16 +148,12 @@ def download_availablity(file_hash, user_ip, db: Session):
         and_(model.DownloadInfo.download_url == file_hash,
         model.DownloadInfo.user_ip == user_ip)).order_by(
         model.DownloadInfo.download_id.desc()).first()
-    #dn_info = descending.first()
-    #print(dn_info.last_download_time)
     return dn_info
 
 
 def delete_file_scheduled(db: Session):
     current_time = datetime.datetime.now()
-    print(current_time)
     schedule_time = current_time - datetime.timedelta(days = 14)
-    print(schedule_time)
     files = db.query(model.FileInfo).filter(model.FileInfo.upload_date_time < schedule_time).all()
     if files==None:
         return False
