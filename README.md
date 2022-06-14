@@ -57,6 +57,11 @@ yarn install
 yarn start
 ```
 
+4. Create a `.env` file and put the following line inside the `.env` file- 
+
+```
+SKIP_PREFLIGHT_CHECK=true
+```
 4. The *Frontend* will be running on- 
 - *http://127.0.0.1:3000/*
 
