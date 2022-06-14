@@ -3,10 +3,10 @@ import os
 import glob
 
 def get_ip():
-    response = requests.get(url = "https://geolocation-db.com/json/")
+    response = requests.get(url = "https://ipgeolocation.abstractapi.com/v1/?api_key=a6c7fa75b0894a56af54c76a30a9088f")
     data = response.json()
-    print(data["IPv4"])
-    return data["IPv4"]
+    print(data["ip_address"])
+    return data["ip_address"]
 
 def get_blocking_status(hash):
     response = requests.get(url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+hash)
@@ -50,3 +50,5 @@ def file_status(code):
 
 def days_hours_minutes(td):
     return td.days, td.seconds//3600, (td.seconds//60)%60
+
+get_ip()
