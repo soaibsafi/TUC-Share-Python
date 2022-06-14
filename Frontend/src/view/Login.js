@@ -6,9 +6,6 @@ import "./Admin.css";
 import {withStyles} from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
 
-const redirectadminpath = '/adminpanel';
-const redirectteacherpath = '/teacherpanel';
-const redirectpupilpath = '/pupilpanel';
 
 const styles = theme => ({
   root: {},

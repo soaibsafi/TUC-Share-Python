@@ -187,7 +187,6 @@ export async function createNewUser(data){
 
 export async function login(data){
   url = host + "login";
-   // debugger
   try{
     const response = await axios.post(url, JSON.stringify(data), {
       headers:{'Content-Type': 'application/json'}

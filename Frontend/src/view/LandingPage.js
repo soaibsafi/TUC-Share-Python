@@ -45,14 +45,6 @@ class LandingPage extends React.Component {
     this.props.history.push({ pathname: "/user" , state: {userinfo: this.state.userinfo}});
   }
 
-  componentDidMount() {
-    if(typeof this.props.location.state === 'undefined'){
-
-    } else{
-      this.setState({userType: this.props.location.state.userType, userinfo: this.props.location.state.userinfo})
-    }
-  }
-
   loadRegister() {
     this.props.history.push({ pathname: "/registration" });
   }
@@ -109,7 +101,7 @@ class LandingPage extends React.Component {
       hashId,
     };
     tempList.push(obj);
-    that.setState({ filesList: tempList }, console.log(that.state.filesList));
+    that.setState({ filesList: tempList });
   }
 
   addFile() {
@@ -122,9 +114,7 @@ class LandingPage extends React.Component {
     );
 
     if(Object.keys(that.state.userinfo).length === 0){
-      console.log("Login as guest")
       uploadFile(fileData, "GEUST", 0).then((response) => {
-        console.log(response);
         var status_code = response.data.hasOwnProperty('status_code')
         if(status_code) alert(response.data.detail)
         else {
@@ -132,9 +122,7 @@ class LandingPage extends React.Component {
         }
       });
     } else{
-      console.log("Login as user")
       uploadFile(fileData, "USER", this.state.userinfo.user_id).then((response) => {
-        console.log(response);
         var status_code = response.data.hasOwnProperty('status_code')
         if(status_code) alert(response.data.detail)
         else {
@@ -161,7 +149,6 @@ class LandingPage extends React.Component {
       password: that.state.password,
     };
     login(data).then((response) => {
-      console.log(response);
       if (response.status === 200 && response.statusText === "OK") {
         this.props.history.push({
           pathname: "/adminpanel",
@@ -176,6 +163,14 @@ class LandingPage extends React.Component {
       this.setState({ username: e.target.value });
     } else {
       this.setState({ password: e.target.value });
+    }
+  }
+
+  componentDidMount() {
+    if(typeof this.props.location.state === 'undefined'){
+
+    } else{
+      this.setState({userType: this.props.location.state.userType, userinfo: this.props.location.state.userinfo})
     }
   }
 
@@ -258,8 +253,6 @@ class LandingPage extends React.Component {
         <button className="btn btn-info upload" onClick={this.uploadFile}>
           Upload
         </button>
-
-          {console.log()}
           <div
             className="signupSigninLink"
             style={{ display: this.state.userType ? "none" : "" }}

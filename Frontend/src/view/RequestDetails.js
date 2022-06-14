@@ -18,6 +18,7 @@ class RequestDetails extends React.Component {
     this.state = {
       requestDetails: this.props.requestDetails
     }
+
     this.loadFillData = this.loadFillData.bind(this);
     this.close = this.close.bind(this);
     this.approve = this.approve.bind(this);
@@ -116,7 +117,6 @@ class RequestDetails extends React.Component {
       </div>
     )
   }
-
 }
 
 export default  (RequestDetails);

@@ -104,10 +104,8 @@ class userpanel extends React.Component {
   }
 
   loadFillData() {
-    // debugger
     if (this.state.fileList.length) {
       return this.state.fileList.map((data) => {
-        // console.log(data)
         var filename = data.file_name+data.file_type
         var filesize = data.file_size / 1024
         var size = filesize > 1023 ? filesize/1024 : filesize
@@ -237,17 +235,6 @@ class userpanel extends React.Component {
     )
   }
 
-  // logoutAction() {
-  //   var that = this;
-  //   that.setState({token: ''},
-  //       () => {
-  //         that.props.history.push({pathname: redirectpath});
-  //       })
-  // }
-  //
-  // tabSelectionAction(idx) {
-  //   this.setState({selectedTab: idx})
-  // }
 }
 
 export default withStyles(styles, {withTheme: true})(userpanel);

@@ -11,9 +11,7 @@ const styles = (theme) => ({
   root: {},
 });
 
-const redirectpath = "/login";
-
-class adminPanel extends React.Component {
+class admin extends React.Component {
   constructor(props) {
     super(props);
 
@@ -59,7 +57,6 @@ class adminPanel extends React.Component {
   loadFillData() {
     if (this.state.requestList.length) {
       return this.state.requestList.map((data) => {
-        // console.log(data)
         var filename = data.file_name + data.file_type;
         return (
           <tr key={data.req_id}>
@@ -171,17 +168,6 @@ class adminPanel extends React.Component {
     );
   }
 
-  // logoutAction() {
-  //   var that = this;
-  //   that.setState({token: ''},
-  //       () => {
-  //         that.props.history.push({pathname: redirectpath});
-  //       })
-  // }
-  //
-  // tabSelectionAction(idx) {
-  //   this.setState({selectedTab: idx})
-  // }
 }
 
-export default withStyles(styles, { withTheme: true })(adminPanel);
+export default withStyles(styles, { withTheme: true })(admin);

@@ -24,7 +24,7 @@ class loginView extends React.Component {
     };
 
     this.createUser = this.createUser.bind(this);
-    // this.onChangeHandler = this.onChangeHandler.bind(this);
+    this.onChangeHandler = this.onChangeHandler.bind(this);
   }
 
   createUser() {
@@ -40,7 +40,6 @@ class loginView extends React.Component {
     createNewUser(data)
       .then((response) => {
         if (response.statusText === "OK" && response.status === 200) {
-          console.log(response.data);
           this.props.history.push({ pathname: "/" });
         } else alert("Login falied!");
       })

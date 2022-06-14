@@ -27,14 +27,11 @@ class BlockPopUp extends React.Component {
 
     this.loadFillData = this.loadFillData.bind(this);
     this.close = this.close.bind(this);
-    this.approve = this.approve.bind(this);
-    this.reject = this.reject.bind(this);
   }
 
   close() {
     var that = this
     that.props.closePopup();
-    // that.props.reloadList();
   }
 
   reloadFileStatus(hash){
@@ -110,46 +107,6 @@ class BlockPopUp extends React.Component {
     this.setState({reason: e.target.value})
   }
 
-  approve(){
-    var that = this
-    var hashid = this.state.requestDetails[0].file_hash
-    var reqID = this.state.requestDetails[0].req_id
-
-    checkFileStatus(hashid).then(res => {
-      if(res.status === 200 && res.statusText === 'OK'){
-        if(res.data.filestatus === "Blocked"){
-          blockFile(hashid).then(res => {
-            if(res.data.code === 210){ /// TODO : check the response code for hash creation
-              deleteRequest(reqID).then(res => {
-                alert("This file has been blocked successfully")
-                that.close()
-              })
-            }
-          })
-        } else{
-          unblockFile(hashid).then(res => {
-            if(res.data.code === 204){
-              deleteRequest(reqID).then(res => {
-                alert("This file has been unblocked successfully")
-                that.close()
-              })
-            }
-          })
-        }
-      }
-    })
-  }
-
-  reject(){
-    var that = this
-    var reqID = this.state.requestDetails[0].req_id
-
-    deleteRequest(reqID).then(res => {
-      alert("This file has been rejected successfully")
-      that.close()
-    })
-  }
-
   loadFillData() {
     if (this.state.requestDetails.length) {
       return this.state.requestDetails.map(data => {
@@ -188,14 +145,6 @@ class BlockPopUp extends React.Component {
               <button className='btn reject mr-2' onClick={this.changeFileStatus}>{this.state.actionStatus}</button>
               <button className='btn btn-info cancel' onClick={this.close}>{"Close"}</button>
             </div>
-            {/*<div className="ag-theme-alpine" >*/}
-            {/*  {this.loadFillData()}*/}
-            {/*</div>*/}
-            {/*<div className="btn-group reqButton" role="group">*/}
-            {/*  <button className='btn mr-2 approve' onClick={this.approve}>{"Approve"}</button>*/}
-            {/*  <button className='btn reject mr-2' onClick={this.reject}>{"Reject"}</button>*/}
-            {/*  <button className='btn btn-info cancel' onClick={this.close}>{"Close"}</button>*/}
-            {/*</div>*/}
           </div>
         </div>
       </div>

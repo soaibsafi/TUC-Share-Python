@@ -43,7 +43,6 @@ class LandingPage extends React.Component {
     this.loadFillData = this.loadFillData.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
     this.backToUser = this.backToUser.bind(this);
-    // this.changeFileStatus = this.changeFileStatus.bind(this);
     this.openPopUp = this.openPopUp.bind(this);
     this.switchPopup = this.switchPopup.bind(this);
   }
@@ -93,8 +92,6 @@ class LandingPage extends React.Component {
       })
     })
   }
-
-
 
   backToUser(){
     var that = this
