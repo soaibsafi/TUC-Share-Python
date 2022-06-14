@@ -81,7 +81,7 @@ class userpanel extends React.Component {
   }
 
   logoutAction(){
-    this.props.history.push({ pathname: "/" , state:{userType: ""}});
+    this.props.history.push({ pathname: "/" , state:{userType: "", userinfo: {}}});
   }
 
   loadFileList(){

@@ -39,10 +39,6 @@ class LandingPage extends React.Component {
     this.loadLogin = this.loadLogin.bind(this);
     this.copyUrl = this.copyUrl.bind(this);
     this.backToUser = this.backToUser.bind(this);
-
-    // this.loginAction = this.loginAction.bind(this);
-    // this.onChangeHandler = this.onChangeHandler.bind(this);
-    // this.createUser = this.createUser.bind(this);
   }
 
   backToUser(){
@@ -55,7 +51,6 @@ class LandingPage extends React.Component {
     } else{
       this.setState({userType: this.props.location.state.userType, userinfo: this.props.location.state.userinfo})
     }
-
   }
 
   loadRegister() {
@@ -126,7 +121,7 @@ class LandingPage extends React.Component {
       this.state.selectedFile.name
     );
 
-    if(Object.keys(that.state.userinfo).length === 0 ){
+    if(Object.keys(that.state.userinfo).length === 0){
       console.log("Login as guest")
       uploadFile(fileData, "GEUST", 0).then((response) => {
         console.log(response);
