@@ -118,15 +118,15 @@ class userpanel extends React.Component {
               <td className="col-2">{filename}</td>
               <td className="col-1">{size.toFixed(2)} {sizeMatric}</td>
               <td className="col-2">{requestDate}</td>
-              <td className="col-3">{downloadURL}</td>
+              <td className="col-2">{downloadURL}</td>
               <td className="col-1">{status}</td>
-              <td>{<IconButton className="btn btn-info col-sm" onClick={() => this.removeFile(data)}>
+              <td>{<IconButton className="btn btn-info col" onClick={() => this.removeFile(data)}>
                 <micon.RemoveCircle style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
-              <td>{<IconButton className="btn btn-info col-sm" onClick={() => this.downloadFile(data)}>
+              <td>{<IconButton className="btn btn-info col" onClick={() => this.downloadFile(data)}>
                 <micon.CloudDownloadRounded style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
-              <td>{<IconButton className="btn btn-info col-sm" onClick={() => this.copyUrl(downloadURL)}>
+              <td>{<IconButton className="btn btn-info col" onClick={() => this.copyUrl(downloadURL)}>
                 <micon.FileCopy style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
             </tr>
@@ -197,10 +197,9 @@ class userpanel extends React.Component {
                       <th className="col-2" scope="col">File Name</th>
                       <th className="col-1" scope="col">Size</th>
                       <th className="col-2" scope="col">Upload Date & Time</th>
-                      <th className="col-3" scope="col">Download URL</th>
+                      <th className="col-2" scope="col">Download URL</th>
                       <th className="col-1" scope="col">Status</th>
-                      <th className="col-sm" scope="col"></th>
-                      <th className="col-sm" scope="col"></th>
+                      <th className="col" scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>

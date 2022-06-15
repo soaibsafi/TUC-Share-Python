@@ -246,7 +246,7 @@ class LandingPage extends React.Component {
             <tbody>{this.loadFillData()}</tbody>
           </table>
         </div>
-        <button className="btn btn-info upload" onClick={this.backToUser} style={{display: this.state.userType ? '' : 'none'}}>
+        <button className="btn btn-info mr-2 cancel" onClick={this.backToUser} style={{display: this.state.userType ? '' : 'none'}}>
           Back
         </button>
 
