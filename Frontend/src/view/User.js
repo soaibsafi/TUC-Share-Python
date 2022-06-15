@@ -30,12 +30,12 @@ class userpanel extends React.Component {
     this.loadFillData = this.loadFillData.bind(this);
     this.removeFile = this.removeFile.bind(this);
     this.downloadFile = this.downloadFile.bind(this);
-
     this.openPopup = this.openPopup.bind(this);
     this.switchPopup = this.switchPopup.bind(this);
     this.loadFileList = this.loadFileList.bind(this);
     this.logoutAction = this.logoutAction.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
+    this.copyUrl = this.copyUrl.bind(this);
   }
 
   componentDidMount() {
@@ -48,15 +48,6 @@ class userpanel extends React.Component {
         that.loadFileList()
       })
     }
-
-    /// TODO : need to check this snipet
-    /*
-    if (token) {
-      window.onpopstate = function (event) {
-        that.props.history.go(1);
-      };
-    }*/
-
   }
 
   downloadFile(data){
@@ -103,6 +94,10 @@ class userpanel extends React.Component {
     this.setState({requestDetails: [data]}, () =>{that.switchPopup()})
   }
 
+  copyUrl(url) {
+    navigator.clipboard.writeText(url)
+  }
+
   loadFillData() {
     if (this.state.fileList.length) {
       return this.state.fileList.map((data) => {
@@ -114,7 +109,6 @@ class userpanel extends React.Component {
         var requestDate = reqDT.toLocaleString()
 
         var status = ''
-        debugger
         if(data.status === "200" || data.status === "204") status = "Unblocked"
         else if(data.status === "210" || data.status === "201") status = "Blocked"
 
@@ -131,6 +125,9 @@ class userpanel extends React.Component {
               </IconButton>}</td>
               <td>{<IconButton className="btn btn-info col-sm" onClick={() => this.downloadFile(data)}>
                 <micon.CloudDownloadRounded style={{color: "#000", frontSize: "100"}}/>
+              </IconButton>}</td>
+              <td>{<IconButton className="btn btn-info col-sm" onClick={() => this.copyUrl(downloadURL)}>
+                <micon.FileCopy style={{color: "#000", frontSize: "100"}}/>
               </IconButton>}</td>
             </tr>
         );
