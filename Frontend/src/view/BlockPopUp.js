@@ -22,9 +22,9 @@ class BlockPopUp extends React.Component {
       fileInfo: this.props.fileInfo
 
     }
+
     this.handleChange=this.handleChange.bind(this);
     this.changeFileStatus=this.changeFileStatus.bind(this);
-
     this.loadFillData = this.loadFillData.bind(this);
     this.close = this.close.bind(this);
   }
@@ -36,6 +36,7 @@ class BlockPopUp extends React.Component {
 
   reloadFileStatus(hash){
     var that = this
+    that.close()
     that.props.checkStatus(hash)
   }
 
@@ -45,20 +46,9 @@ class BlockPopUp extends React.Component {
 
     if(this.state.reason.length !== 0){
       saveRequest(this.state.fileInfo.file_id, this.state.reason).then(res => {
-        if (this.state.actionStatus === 'Unblock') {
-          unblockFile(filehash).then(res => {
-            if (res.data.code === 204) {
-              alert("The request has been submitted successfully")
-              that.props.history.push({ pathname: "/" });
-            }
-          })
-        } else {
-          blockFile(filehash).then(res => {
-            if (res.data.code === 201) {
-              alert("The request has been submitted successfully")
-              that.props.history.push({ pathname: "/" });
-            }
-          })
+        if(res.status === 200 && res.statusText === "OK") {
+          alert("The request has been submitted successfully")
+          that.reloadFileStatus(filehash)
         }
       })
     } else{
