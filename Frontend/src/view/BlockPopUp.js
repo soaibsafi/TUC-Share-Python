@@ -45,7 +45,7 @@ class BlockPopUp extends React.Component {
     var that = this
 
     if(this.state.reason.length !== 0){
-      saveRequest(this.state.fileInfo.file_id, this.state.reason).then(res => {
+      saveRequest(this.state.fileInfo.file_id, this.state.reason, this.state.actionStatus).then(res => {
         if(res.status === 200 && res.statusText === "OK") {
           alert("The request has been submitted successfully")
           that.reloadFileStatus(filehash)

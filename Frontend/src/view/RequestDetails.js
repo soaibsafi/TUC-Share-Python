@@ -2,7 +2,7 @@ import React from 'react';
 import './All.css';
 import './Admin.css'
 
-import {checkFileStatus, blockFile, deleteRequest, unblockFile} from "../api/utils";
+import {checkFileStatus, blockFile, deleteRequest, unblockFile, requestInfo} from "../api/utils";
 
 const styles = theme => ({
   root: {},
@@ -30,11 +30,11 @@ class RequestDetails extends React.Component {
     var hashid = this.state.requestDetails[0].file_hash
     var reqID = this.state.requestDetails[0].req_id
 
-    checkFileStatus(hashid).then(res => {
+    requestInfo(reqID).then(res => {
       if(res.status === 200 && res.statusText === 'OK'){
-        if(res.data.filestatus === "Blocked"){
+        if(res.data.type === "Block"){
           blockFile(hashid).then(res => {
-            if(res.data.code === 210){ /// TODO : check the response code for hash creation
+            if(res.data.code === 210 || res.data.code === 201){
               deleteRequest(reqID).then(res => {
                 alert("This file has been blocked successfully")
                 that.close()

@@ -3,12 +3,15 @@ import axios from "axios"
 const host = "http://127.0.0.1:8000/"
 var url;
 
-export async function saveRequest( fileid, reason){
+
+
+export async function saveRequest( fileid, reason, reqType){
   url = host + "request"
 
   var data ={
     "req_id": 0,
     "reason": reason,
+    "type" : reqType,
     "file_id": fileid
   }
 
@@ -138,6 +141,17 @@ export async function checkFileStatus(hashid){
 
 export async function getFileList(userid){
   url = host + "files/" + userid;
+
+  try{
+    const response = await axios.get(url);
+    return response
+  } catch(error){
+    console.log(error)
+  }
+}
+
+export async function requestInfo(rid){
+  url = host + "request/" + rid;
 
   try{
     const response = await axios.get(url);

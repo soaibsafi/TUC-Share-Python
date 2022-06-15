@@ -114,8 +114,9 @@ class userpanel extends React.Component {
         var requestDate = reqDT.toLocaleString()
 
         var status = ''
-        if(data.status === "200") status = "Unblocked"
-        else if(data.status === "210") status = "Blocked"
+        debugger
+        if(data.status === "200" || data.status === "204") status = "Unblocked"
+        else if(data.status === "210" || data.status === "201") status = "Blocked"
 
         var downloadURL = redirectpath + data.file_hash  ///http://localhost:3000/download/50ce455d63fde3c33d727ceab15f3577a62b6e567e26153a9b74064f9a9f8490
         return (
