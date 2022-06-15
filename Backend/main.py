@@ -8,6 +8,7 @@ import aiofiles
 import base64
 from base64 import b64encode
 import schedule
+from sqlalchemy import update
 
 from fastapi import Depends, FastAPI, HTTPException, File, UploadFile, Response, Body
 from fastapi.responses import StreamingResponse
@@ -135,10 +136,12 @@ def delete_request(request_id: int, db: Session = Depends(get_db)):
 
 
 @app.delete("/unblock")
-def unblock_file(file_hash: str):
+def unblock_file(file_hash: str, db: Session = Depends(get_db)):
     url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
     sts = tuc_session.delete(url)
     code = sts.status_code
+    db.query(model.FileInfo).filter(model.FileInfo.file_hash == file_hash).update({'status': code})
+    db.commit()
     status = {
         'code': code,
         'fstatus': helper.file_status(code)
@@ -146,10 +149,12 @@ def unblock_file(file_hash: str):
     return status
 
 @app.put("/block")
-def block_file(file_hash: str):
+def block_file(file_hash: str, db: Session = Depends(get_db)):
     url = "https://www.tu-chemnitz.de/informatik/DVS/blocklist/"+file_hash
     sts = tuc_session.put(url)
     code = sts.status_code
+    db.query(model.FileInfo).filter(model.FileInfo.file_hash == file_hash).update({'status': code})
+    db.commit()
     status = {
         'code': code,
         'fstatus': helper.file_status(code)
