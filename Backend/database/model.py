@@ -39,6 +39,7 @@ class RequestInfo(Base):
 
     req_id = Column(Integer, primary_key=True, index=True)
     reason = Column(String)
+    type = Column(String)
     file_id = Column(Integer, ForeignKey("file_info.file_id"))
 
     file = relationship("FileInfo", back_populates="request_file")

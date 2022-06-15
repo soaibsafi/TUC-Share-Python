@@ -70,6 +70,7 @@ def delete_file_by_file_id(file_id: int, db: Session):
 def add_request_info(reqInfo: schemas.RequestInfo, db: Session):
     db_req = model.RequestInfo(
         reason = reqInfo.reason,
+        type = reqInfo.type,
         file_id = reqInfo.file_id
     )
     db.add(db_req)
@@ -97,6 +98,10 @@ def get_all_pending_request(db: Session):
         ).filter(model.RequestInfo.file_id == model.FileInfo.file_id).all()
     return data
 
+def get_single_request(req_id, db: Session):
+    data = db.query(model.RequestInfo
+        ).filter(model.RequestInfo.req_id ==req_id ).first()
+    return data
 
 def get_all_files_of_a_user(user_id:int, db: Session):
     return db.query(

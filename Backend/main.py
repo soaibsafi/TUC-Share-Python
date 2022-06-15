@@ -130,6 +130,11 @@ def get_pending_requests(reqInfo: schemas.RequestInfo, db: Session = Depends(get
 def get_pending_requests(db: Session = Depends(get_db)):
     return query.get_all_pending_request(db)
 
+@app.get("/request/{req_id}")
+def get_pending_requests(req_id: int, db: Session = Depends(get_db)):
+    return query.get_single_request(req_id, db)
+
+
 @app.delete("/request")
 def delete_request(request_id: int, db: Session = Depends(get_db)):
     return query.delete_request_by_id(request_id, db)

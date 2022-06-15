@@ -31,6 +31,7 @@ class FileInfo(BaseModel):
 class RequestInfo(BaseModel):
     req_id: int
     reason: str
+    type: str
     file_id: int
 
     class Config:
