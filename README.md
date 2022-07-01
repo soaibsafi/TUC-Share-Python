@@ -1,4 +1,4 @@
-# TUC-Share-Python
+# TUC Share
 
 ## Backend
 
@@ -29,15 +29,17 @@ USERNAM=<TUC USERANME>
 PASSWORD=<TUC PASSWORD>
 ```
 
-5. Strat the *Backend* using- 
+5. Download the [Chrome Driver](https://chromedriver.storage.googleapis.com/index.html?path=104.0.5112.20/), extract the zip and put the *chromedriver.exe* in the Backent root directory
+
+6. Strat the *Backend* using- 
 ```
 uvicorn main:app --reload
 ```
 
-6. The *Backend* will be running on- 
+7. The *Backend* will be running on- 
 - *http://127.0.0.1:8000/*
 
-7. The API documentation could be found at- 
+8. The API documentation could be found at- 
 - *http://127.0.0.1:8000/docs*
 
 ---
